@@ -1,0 +1,17 @@
+name: Verify Windows client
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          architecture: x64
+          cache: pip
+      - run: python -m pip install -r requirements-build.lock
+      - run: python -B -m unittest discover -s client -p "test_*.py"
+      - run: python -B scripts/check_release.py

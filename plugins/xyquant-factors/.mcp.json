@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "xyquant_factors": {
+      "command": "cmd.exe",
+      "args": [
+        "/d",
+        "/c",
+        ".\\bin\\FactorBridge.exe",
+        "--stdio"
+      ],
+      "startup_timeout_sec": 60,
+      "tool_timeout_sec": 60,
+      "env_vars": [
+        "LOCALAPPDATA",
+        "APPDATA",
+        "USERPROFILE",
+        "CODEX_HOME",
+        "PATH",
+        "TEMP",
+        "TMP"
+      ],
+      "cwd": "."
+    }
+  }
+}

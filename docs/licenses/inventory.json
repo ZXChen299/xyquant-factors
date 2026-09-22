@@ -1,0 +1,948 @@
+{
+  "source": "Installed wheel metadata from the environment matching requirements-build.lock",
+  "lock_sha256": "1b2df875cf640311a3e88a7484c10c30cce4428be64af1595e94e0e0ecf6445d",
+  "python": {
+    "version": "3.12.14",
+    "copy": "docs/licenses/cpython-3.12.14/LICENSE.txt",
+    "sha256": "886a0ead2d89030ee62dbff52b04e47ab91998341295bb9c56fb952b4e081c7a"
+  },
+  "distributions": [
+    {
+      "name": "altgraph",
+      "version": "0.17.5",
+      "license_expression": null,
+      "license": "MIT",
+      "project_urls": [
+        "Documentation, https://altgraph.readthedocs.io/en/latest/",
+        "Issue tracker, https://github.com/ronaldoussoren/altgraph/issues",
+        "Repository, https://github.com/ronaldoussoren/altgraph"
+      ],
+      "home_page": "https://altgraph.readthedocs.io",
+      "upstream_url": "https://github.com/ronaldoussoren/altgraph",
+      "files": [
+        {
+          "source": "altgraph-0.17.5.dist-info/LICENSE",
+          "copy": "docs/licenses/altgraph-0.17.5/altgraph-0.17.5.dist-info/LICENSE",
+          "sha256": "6c194d6db0c64d45535d10c95142b9b0cda7b7dcc7f1ddee302b3d536f3dbe46"
+        }
+      ]
+    },
+    {
+      "name": "annotated-types",
+      "version": "0.8.0",
+      "license_expression": "MIT",
+      "license": null,
+      "project_urls": [
+        "Homepage, https://github.com/annotated-types/annotated-types",
+        "Source, https://github.com/annotated-types/annotated-types",
+        "Changelog, https://github.com/annotated-types/annotated-types/releases"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/annotated-types/annotated-types",
+      "files": [
+        {
+          "source": "annotated_types-0.8.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/annotated-types-0.8.0/annotated_types-0.8.0.dist-info/licenses/LICENSE",
+          "sha256": "fe1049884b1a0d9342901e88e07f32925d24b3121d9972b6a6805fb9824b095d"
+        }
+      ]
+    },
+    {
+      "name": "anyio",
+      "version": "4.15.1",
+      "license_expression": "MIT",
+      "license": null,
+      "project_urls": [
+        "Documentation, https://anyio.readthedocs.io/en/latest/",
+        "Changelog, https://anyio.readthedocs.io/en/stable/versionhistory.html",
+        "Source code, https://github.com/agronholm/anyio",
+        "Issue tracker, https://github.com/agronholm/anyio/issues"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/agronholm/anyio",
+      "files": [
+        {
+          "source": "anyio-4.15.1.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/anyio-4.15.1/anyio-4.15.1.dist-info/licenses/LICENSE",
+          "sha256": "5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0"
+        }
+      ]
+    },
+    {
+      "name": "attrs",
+      "version": "26.1.0",
+      "license_expression": "MIT",
+      "license": null,
+      "project_urls": [
+        "Documentation, https://www.attrs.org/",
+        "Changelog, https://www.attrs.org/en/stable/changelog.html",
+        "GitHub, https://github.com/python-attrs/attrs",
+        "Funding, https://github.com/sponsors/hynek",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-attrs?utm_source=pypi-attrs&utm_medium=pypi"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/python-attrs/attrs",
+      "files": [
+        {
+          "source": "attrs-26.1.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/attrs-26.1.0/attrs-26.1.0.dist-info/licenses/LICENSE",
+          "sha256": "882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f"
+        }
+      ]
+    },
+    {
+      "name": "Authlib",
+      "version": "1.8.0",
+      "license_expression": null,
+      "license": "BSD-3-Clause",
+      "project_urls": [
+        "Documentation, https://docs.authlib.org/",
+        "Purchase, https://authlib.org/plans",
+        "Issues, https://github.com/authlib/authlib/issues",
+        "Source, https://github.com/authlib/authlib",
+        "Donate, https://github.com/sponsors/lepture",
+        "Blog, https://blog.authlib.org/"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/authlib/authlib",
+      "files": [
+        {
+          "source": "authlib-1.8.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/authlib-1.8.0/authlib-1.8.0.dist-info/licenses/LICENSE",
+          "sha256": "8e1b48518de9c6cd00cb48c7fe5b8023fd90d5552ca12ebe7362a0df30ddbe45"
+        }
+      ]
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1",
+      "license_expression": "MIT-0",
+      "license": null,
+      "project_urls": [
+        "Documentation, https://cffi.readthedocs.io/",
+        "Changelog, https://cffi.readthedocs.io/en/latest/whatsnew.html",
+        "Download, https://github.com/python-cffi/cffi/releases",
+        "Contact, https://groups.google.com/forum/#!forum/python-cffi",
+        "Source Code, https://github.com/python-cffi/cffi",
+        "Issue Tracker, https://github.com/python-cffi/cffi/issues"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/python-cffi/cffi",
+      "files": [
+        {
+          "source": "cffi-2.1.1.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/cffi-2.1.1/cffi-2.1.1.dist-info/licenses/LICENSE",
+          "sha256": "5ba24ddc57067f9249add644c3afc41a5d6dc37e23433ef759d95df370b0af63"
+        }
+      ]
+    },
+    {
+      "name": "click",
+      "version": "8.5.0",
+      "license_expression": "BSD-3-Clause",
+      "license": null,
+      "project_urls": [
+        "Changes, https://click.palletsprojects.com/page/changes/",
+        "Chat, https://discord.gg/pallets",
+        "Documentation, https://click.palletsprojects.com/",
+        "Donate, https://palletsprojects.com/donate",
+        "Source, https://github.com/pallets/click/"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/pallets/click/",
+      "files": [
+        {
+          "source": "click-8.5.0.dist-info/licenses/LICENSE.txt",
+          "copy": "docs/licenses/click-8.5.0/click-8.5.0.dist-info/licenses/LICENSE.txt",
+          "sha256": "9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d"
+        }
+      ]
+    },
+    {
+      "name": "cryptography",
+      "version": "50.0.1",
+      "license_expression": "Apache-2.0 OR BSD-3-Clause",
+      "license": null,
+      "project_urls": [
+        "changelog, https://cryptography.io/en/latest/changelog/",
+        "documentation, https://cryptography.io/",
+        "homepage, https://github.com/pyca/cryptography",
+        "issues, https://github.com/pyca/cryptography/issues",
+        "source, https://github.com/pyca/cryptography/"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/pyca/cryptography/",
+      "files": [
+        {
+          "source": "cryptography-50.0.1.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/cryptography-50.0.1/cryptography-50.0.1.dist-info/licenses/LICENSE",
+          "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb"
+        },
+        {
+          "source": "cryptography-50.0.1.dist-info/licenses/LICENSE.APACHE",
+          "copy": "docs/licenses/cryptography-50.0.1/cryptography-50.0.1.dist-info/licenses/LICENSE.APACHE",
+          "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+        },
+        {
+          "source": "cryptography-50.0.1.dist-info/licenses/LICENSE.BSD",
+          "copy": "docs/licenses/cryptography-50.0.1/cryptography-50.0.1.dist-info/licenses/LICENSE.BSD",
+          "sha256": "602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb"
+        }
+      ]
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0",
+      "license_expression": null,
+      "license": "MIT",
+      "project_urls": [],
+      "home_page": "https://github.com/python-hyper/h11",
+      "upstream_url": "https://github.com/python-hyper/h11",
+      "files": [
+        {
+          "source": "h11-0.16.0.dist-info/licenses/LICENSE.txt",
+          "copy": "docs/licenses/h11-0.16.0/h11-0.16.0.dist-info/licenses/LICENSE.txt",
+          "sha256": "37db5bb85926db28a427a25867f10b1232003aea1be69ccb851138adb8e6f361"
+        }
+      ]
+    },
+    {
+      "name": "httpcore2",
+      "version": "2.13.0",
+      "license_expression": "BSD-3-Clause",
+      "license": null,
+      "project_urls": [
+        "Changelog, https://github.com/pydantic/httpx2/blob/main/src/httpcore2/CHANGELOG.md",
+        "Homepage, https://github.com/pydantic/httpx2",
+        "Source, https://github.com/pydantic/httpx2/blob/main/src/httpcore2"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/pydantic/httpx2/blob/main/src/httpcore2",
+      "files": [
+        {
+          "source": "httpcore2-2.13.0.dist-info/licenses/LICENSE.md",
+          "copy": "docs/licenses/httpcore2-2.13.0/httpcore2-2.13.0.dist-info/licenses/LICENSE.md",
+          "sha256": "c4df125c807b0613501e943a5c92496dd11d2c16604ce396097a8dde396304d9"
+        }
+      ]
+    },
+    {
+      "name": "httpx2",
+      "version": "2.13.0",
+      "license_expression": "BSD-3-Clause",
+      "license": null,
+      "project_urls": [
+        "Changelog, https://github.com/pydantic/httpx2/blob/main/src/httpx2/CHANGELOG.md",
+        "Homepage, https://github.com/pydantic/httpx2",
+        "Source, https://github.com/pydantic/httpx2"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/pydantic/httpx2",
+      "files": [
+        {
+          "source": "httpx2-2.13.0.dist-info/licenses/LICENSE.md",
+          "copy": "docs/licenses/httpx2-2.13.0/httpx2-2.13.0.dist-info/licenses/LICENSE.md",
+          "sha256": "7e7d6dbaf7fe160d39fd6e84fd02c33cab96bcbea34d36998d545bceb4a19c30"
+        }
+      ]
+    },
+    {
+      "name": "idna",
+      "version": "3.20",
+      "license_expression": "BSD-3-Clause",
+      "license": null,
+      "project_urls": [
+        "Changelog, https://github.com/kjd/idna/blob/master/HISTORY.md",
+        "Issue tracker, https://github.com/kjd/idna/issues",
+        "Source, https://github.com/kjd/idna"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/kjd/idna",
+      "files": [
+        {
+          "source": "idna-3.20.dist-info/licenses/LICENSE.md",
+          "copy": "docs/licenses/idna-3.20/idna-3.20.dist-info/licenses/LICENSE.md",
+          "sha256": "1a9a4f0e3d479a27240ddd59a9137a66ab4a0f9dfdc8ca6188cc0bfd85187f04"
+        }
+      ]
+    },
+    {
+      "name": "joserfc",
+      "version": "1.7.5",
+      "license_expression": null,
+      "license": "BSD-3-Clause",
+      "project_urls": [
+        "Documentation, https://jose.authlib.org/",
+        "Source, https://github.com/authlib/joserfc",
+        "Funding, https://github.com/sponsors/authlib",
+        "Blog, https://blog.authlib.org/"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/authlib/joserfc",
+      "files": [
+        {
+          "source": "joserfc-1.7.5.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/joserfc-1.7.5/joserfc-1.7.5.dist-info/licenses/LICENSE",
+          "sha256": "19ee1fafcc9ec4217fc32b8a651d820538c789cf4041cb4e46b4b176a5f2a9c8"
+        }
+      ]
+    },
+    {
+      "name": "jsonschema",
+      "version": "4.26.0",
+      "license_expression": "MIT",
+      "license": null,
+      "project_urls": [
+        "Homepage, https://github.com/python-jsonschema/jsonschema",
+        "Documentation, https://python-jsonschema.readthedocs.io/",
+        "Issues, https://github.com/python-jsonschema/jsonschema/issues/",
+        "Funding, https://github.com/sponsors/Julian",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-jsonschema?utm_source=pypi-jsonschema&utm_medium=referral&utm_campaign=pypi-link",
+        "Changelog, https://github.com/python-jsonschema/jsonschema/blob/main/CHANGELOG.rst",
+        "Source, https://github.com/python-jsonschema/jsonschema"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/python-jsonschema/jsonschema",
+      "files": [
+        {
+          "source": "jsonschema-4.26.0.dist-info/licenses/COPYING",
+          "copy": "docs/licenses/jsonschema-4.26.0/jsonschema-4.26.0.dist-info/licenses/COPYING",
+          "sha256": "4f92a015a13c4d1a040bef018aa13430b4f1bc73b41b16bb846c346766de7439"
+        }
+      ]
+    },
+    {
+      "name": "jsonschema-specifications",
+      "version": "2025.9.1",
+      "license_expression": "MIT",
+      "license": null,
+      "project_urls": [
+        "Documentation, https://jsonschema-specifications.readthedocs.io/",
+        "Homepage, https://github.com/python-jsonschema/jsonschema-specifications",
+        "Issues, https://github.com/python-jsonschema/jsonschema-specifications/issues/",
+        "Funding, https://github.com/sponsors/Julian",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-jsonschema-specifications?utm_source=pypi-jsonschema-specifications&utm_medium=referral&utm_campaign=pypi-link",
+        "Source, https://github.com/python-jsonschema/jsonschema-specifications"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/python-jsonschema/jsonschema-specifications",
+      "files": [
+        {
+          "source": "jsonschema_specifications-2025.9.1.dist-info/licenses/COPYING",
+          "copy": "docs/licenses/jsonschema-specifications-2025.9.1/jsonschema_specifications-2025.9.1.dist-info/licenses/COPYING",
+          "sha256": "42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c"
+        }
+      ]
+    },
+    {
+      "name": "mcp",
+      "version": "2.2.0",
+      "license_expression": null,
+      "license": "MIT",
+      "project_urls": [
+        "Homepage, https://modelcontextprotocol.io",
+        "Documentation, https://py.sdk.modelcontextprotocol.io/",
+        "Repository, https://github.com/modelcontextprotocol/python-sdk",
+        "Issues, https://github.com/modelcontextprotocol/python-sdk/issues"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/modelcontextprotocol/python-sdk",
+      "files": [
+        {
+          "source": "mcp-2.2.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/mcp-2.2.0/mcp-2.2.0.dist-info/licenses/LICENSE",
+          "sha256": "5e13dbbc1d120fc2a03cecde7c91424ae2d7de11b63d58ded2f4431e261ee50d"
+        }
+      ]
+    },
+    {
+      "name": "mcp-types",
+      "version": "2.2.0",
+      "license_expression": null,
+      "license": "MIT",
+      "project_urls": [
+        "Homepage, https://modelcontextprotocol.io",
+        "Documentation, https://py.sdk.modelcontextprotocol.io/",
+        "Repository, https://github.com/modelcontextprotocol/python-sdk",
+        "Issues, https://github.com/modelcontextprotocol/python-sdk/issues"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/modelcontextprotocol/python-sdk",
+      "files": [
+        {
+          "source": "mcp_types-2.2.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/mcp-types-2.2.0/mcp_types-2.2.0.dist-info/licenses/LICENSE",
+          "sha256": "5e13dbbc1d120fc2a03cecde7c91424ae2d7de11b63d58ded2f4431e261ee50d"
+        }
+      ]
+    },
+    {
+      "name": "opentelemetry-api",
+      "version": "1.44.0",
+      "license_expression": "Apache-2.0",
+      "license": null,
+      "project_urls": [
+        "Homepage, https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-api",
+        "Repository, https://github.com/open-telemetry/opentelemetry-python"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/open-telemetry/opentelemetry-python",
+      "files": [
+        {
+          "source": "opentelemetry_api-1.44.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/opentelemetry-api-1.44.0/opentelemetry_api-1.44.0.dist-info/licenses/LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      ]
+    },
+    {
+      "name": "packaging",
+      "version": "26.3",
+      "license_expression": "Apache-2.0 OR BSD-2-Clause",
+      "license": null,
+      "project_urls": [
+        "Documentation, https://packaging.pypa.io/",
+        "Source, https://github.com/pypa/packaging"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/pypa/packaging",
+      "files": [
+        {
+          "source": "packaging-26.3.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/packaging-26.3/packaging-26.3.dist-info/licenses/LICENSE",
+          "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48"
+        },
+        {
+          "source": "packaging-26.3.dist-info/licenses/LICENSE.APACHE",
+          "copy": "docs/licenses/packaging-26.3/packaging-26.3.dist-info/licenses/LICENSE.APACHE",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        },
+        {
+          "source": "packaging-26.3.dist-info/licenses/LICENSE.BSD",
+          "copy": "docs/licenses/packaging-26.3/packaging-26.3.dist-info/licenses/LICENSE.BSD",
+          "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5"
+        }
+      ]
+    },
+    {
+      "name": "pefile",
+      "version": "2024.8.26",
+      "license_expression": null,
+      "license": "MIT",
+      "project_urls": [],
+      "home_page": "https://github.com/erocarrera/pefile",
+      "upstream_url": "https://github.com/erocarrera/pefile",
+      "files": [
+        {
+          "source": "pefile-2024.8.26.dist-info/LICENSE",
+          "copy": "docs/licenses/pefile-2024.8.26/pefile-2024.8.26.dist-info/LICENSE",
+          "sha256": "b44409c067c6da52bfb54bb6624fb11a7b52157c3a13ae1400232f8196e86ad3"
+        }
+      ]
+    },
+    {
+      "name": "pycparser",
+      "version": "3.0",
+      "license_expression": "BSD-3-Clause",
+      "license": null,
+      "project_urls": [
+        "Homepage, https://github.com/eliben/pycparser"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/eliben/pycparser",
+      "files": [
+        {
+          "source": "pycparser-3.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/pycparser-3.0/pycparser-3.0.dist-info/licenses/LICENSE",
+          "sha256": "0c846399369ea76ddd7b5c44fe6d16497415fcf015f5cbb508c24bf98b81c5b1"
+        }
+      ]
+    },
+    {
+      "name": "pydantic",
+      "version": "2.13.5",
+      "license_expression": "MIT",
+      "license": null,
+      "project_urls": [
+        "Homepage, https://github.com/pydantic/pydantic",
+        "Documentation, https://docs.pydantic.dev",
+        "Funding, https://github.com/sponsors/samuelcolvin",
+        "Source, https://github.com/pydantic/pydantic",
+        "Changelog, https://docs.pydantic.dev/latest/changelog/"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/pydantic/pydantic",
+      "files": [
+        {
+          "source": "pydantic-2.13.5.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/pydantic-2.13.5/pydantic-2.13.5.dist-info/licenses/LICENSE",
+          "sha256": "a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3"
+        }
+      ]
+    },
+    {
+      "name": "pydantic_core",
+      "version": "2.46.5",
+      "license_expression": "MIT",
+      "license": null,
+      "project_urls": [
+        "Funding, https://github.com/sponsors/samuelcolvin",
+        "Homepage, https://github.com/pydantic",
+        "Source, https://github.com/pydantic/pydantic/tree/main/pydantic-core"
+      ],
+      "home_page": "https://github.com/pydantic/pydantic",
+      "upstream_url": "https://github.com/pydantic/pydantic/tree/main/pydantic-core",
+      "files": [
+        {
+          "source": "pydantic_core-2.46.5.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/pydantic-core-2.46.5/pydantic_core-2.46.5.dist-info/licenses/LICENSE",
+          "sha256": "fbe7f615f18d135c07000e5a86325db27f42c7729699ef166ac1f7a3f4586bf4"
+        }
+      ]
+    },
+    {
+      "name": "pyinstaller",
+      "version": "6.22.3",
+      "license_expression": null,
+      "license": "GPLv2-or-later with a special exception which allows to use PyInstaller to build and distribute non-free programs (including commercial ones)",
+      "project_urls": [
+        "Homepage, https://pyinstaller.org",
+        "Documentation, https://pyinstaller.org",
+        "Source Code, https://github.com/pyinstaller/pyinstaller",
+        "Release Notes, https://pyinstaller.org/en/stable/CHANGES.html"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/pyinstaller/pyinstaller",
+      "files": [
+        {
+          "source": "pyinstaller-6.22.3.dist-info/licenses/COPYING.txt",
+          "copy": "docs/licenses/pyinstaller-6.22.3/pyinstaller-6.22.3.dist-info/licenses/COPYING.txt",
+          "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+        }
+      ]
+    },
+    {
+      "name": "pyinstaller-hooks-contrib",
+      "version": "2026.7",
+      "license_expression": null,
+      "license": null,
+      "project_urls": [],
+      "home_page": "https://github.com/pyinstaller/pyinstaller-hooks-contrib",
+      "upstream_url": "https://github.com/pyinstaller/pyinstaller-hooks-contrib",
+      "files": [
+        {
+          "source": "pyinstaller_hooks_contrib-2026.7.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/pyinstaller-hooks-contrib-2026.7/pyinstaller_hooks_contrib-2026.7.dist-info/licenses/LICENSE",
+          "sha256": "91d0baaff00773038e72c0a1fc9d5d2d38706b7a2b9c04f34296608f931b9cd0"
+        }
+      ]
+    },
+    {
+      "name": "PyJWT",
+      "version": "2.14.0",
+      "license_expression": "MIT",
+      "license": null,
+      "project_urls": [
+        "Homepage, https://github.com/jpadilla/pyjwt"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/jpadilla/pyjwt",
+      "files": [
+        {
+          "source": "pyjwt-2.14.0.dist-info/licenses/AUTHORS.rst",
+          "copy": "docs/licenses/pyjwt-2.14.0/pyjwt-2.14.0.dist-info/licenses/AUTHORS.rst",
+          "sha256": "925ce43461029eedbf558ec0b7cf7fc4b045def5120ebb97937c70814071cf07"
+        },
+        {
+          "source": "pyjwt-2.14.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/pyjwt-2.14.0/pyjwt-2.14.0.dist-info/licenses/LICENSE",
+          "sha256": "797a7a20231d4c433e9f1911db1731d06b5828b98f499819a034f7c0f56f5ce5"
+        }
+      ]
+    },
+    {
+      "name": "python-multipart",
+      "version": "0.0.32",
+      "license_expression": "Apache-2.0",
+      "license": null,
+      "project_urls": [
+        "Homepage, https://github.com/Kludex/python-multipart",
+        "Documentation, https://kludex.github.io/python-multipart/",
+        "Changelog, https://github.com/Kludex/python-multipart/blob/master/CHANGELOG.md",
+        "Source, https://github.com/Kludex/python-multipart"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/Kludex/python-multipart",
+      "files": [
+        {
+          "source": "python_multipart-0.0.32.dist-info/licenses/LICENSE.txt",
+          "copy": "docs/licenses/python-multipart-0.0.32/python_multipart-0.0.32.dist-info/licenses/LICENSE.txt",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ]
+    },
+    {
+      "name": "pywin32",
+      "version": "312",
+      "license_expression": null,
+      "license": "PSF",
+      "project_urls": [
+        "Homepage, https://github.com/mhammond/pywin32",
+        "Changes, https://github.com/mhammond/pywin32/blob/main/CHANGES.md",
+        "Docs, https://mhammond.github.io/pywin32/",
+        "Bugs, https://github.com/mhammond/pywin32/issues",
+        "Support Requests, https://github.com/mhammond/pywin32/discussions",
+        "Mailing List, https://mail.python.org/mailman/listinfo/python-win32"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/mhammond/pywin32",
+      "files": [
+        {
+          "source": "pywin32-312.dist-info/licenses/adodbapi/license.txt",
+          "copy": "docs/licenses/pywin32-312/pywin32-312.dist-info/licenses/adodbapi/license.txt",
+          "sha256": "5ea2f23c7f00c3006bacf267183e816d8d4b6dc95ea57a4ddb0ff81de6d8719e"
+        },
+        {
+          "source": "pywin32-312.dist-info/licenses/com/License.txt",
+          "copy": "docs/licenses/pywin32-312/pywin32-312.dist-info/licenses/com/License.txt",
+          "sha256": "fad39c18fc3825fa278db1c86fd52cf88d7c525b3c2fbf7817fa383cbae4d423"
+        },
+        {
+          "source": "pywin32-312.dist-info/licenses/com/win32comext/mapi/src/MAPIStubLibrary/LICENSE",
+          "copy": "docs/licenses/pywin32-312/pywin32-312.dist-info/licenses/com/win32comext/mapi/src/MAPIStubLibrary/LICENSE",
+          "sha256": "1c4cf44d2fb8bf2d10214d6da80cc9e05502824cc4460f35be4c7bcb4cde53da"
+        },
+        {
+          "source": "pywin32-312.dist-info/licenses/isapi/README.txt",
+          "copy": "docs/licenses/pywin32-312/pywin32-312.dist-info/licenses/isapi/README.txt",
+          "sha256": "41383bcc95edb8138d37077ae54bfdcbd2a3b77bf745a8529a9c161146e22303"
+        },
+        {
+          "source": "pywin32-312.dist-info/licenses/pythonwin/License.txt",
+          "copy": "docs/licenses/pywin32-312/pywin32-312.dist-info/licenses/pythonwin/License.txt",
+          "sha256": "a74d826efb242db087b850348e20abbfd591b51e2081f2048735290913872924"
+        },
+        {
+          "source": "pywin32-312.dist-info/licenses/pythonwin/Scintilla/License.txt",
+          "copy": "docs/licenses/pywin32-312/pywin32-312.dist-info/licenses/pythonwin/Scintilla/License.txt",
+          "sha256": "57ec79bbeab4fd1cf7460a7ad450d2ab01471810459aeae9e75e4c66b472095f"
+        },
+        {
+          "source": "pywin32-312.dist-info/licenses/pythonwin/pywin/idle/LICENSE.txt",
+          "copy": "docs/licenses/pywin32-312/pywin32-312.dist-info/licenses/pythonwin/pywin/idle/LICENSE.txt",
+          "sha256": "a0fa1e7b8a4230055685e796548ac084a6c0eea395294574093bba72efd9191b"
+        },
+        {
+          "source": "pywin32-312.dist-info/licenses/win32/License.txt",
+          "copy": "docs/licenses/pywin32-312/pywin32-312.dist-info/licenses/win32/License.txt",
+          "sha256": "a74d826efb242db087b850348e20abbfd591b51e2081f2048735290913872924"
+        }
+      ]
+    },
+    {
+      "name": "pywin32-ctypes",
+      "version": "0.2.3",
+      "license_expression": null,
+      "license": "BSD-3-Clause",
+      "project_urls": [],
+      "home_page": "https://github.com/enthought/pywin32-ctypes",
+      "upstream_url": "https://github.com/enthought/pywin32-ctypes",
+      "files": [
+        {
+          "source": "pywin32_ctypes-0.2.3.dist-info/LICENSE.txt",
+          "copy": "docs/licenses/pywin32-ctypes-0.2.3/pywin32_ctypes-0.2.3.dist-info/LICENSE.txt",
+          "sha256": "dfa83b3e2709adfcdb838d9ad55823ca674abb780e60563d9dd9544ccbf785e9"
+        }
+      ]
+    },
+    {
+      "name": "referencing",
+      "version": "0.37.0",
+      "license_expression": "MIT",
+      "license": null,
+      "project_urls": [
+        "Documentation, https://referencing.readthedocs.io/",
+        "Homepage, https://github.com/python-jsonschema/referencing",
+        "Issues, https://github.com/python-jsonschema/referencing/issues/",
+        "Funding, https://github.com/sponsors/Julian",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-referencing?utm_source=pypi-referencing&utm_medium=referral&utm_campaign=pypi-link",
+        "Changelog, https://referencing.readthedocs.io/en/stable/changes/",
+        "Source, https://github.com/python-jsonschema/referencing"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/python-jsonschema/referencing",
+      "files": [
+        {
+          "source": "referencing-0.37.0.dist-info/licenses/COPYING",
+          "copy": "docs/licenses/referencing-0.37.0/referencing-0.37.0.dist-info/licenses/COPYING",
+          "sha256": "42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c"
+        }
+      ]
+    },
+    {
+      "name": "rpds-py",
+      "version": "2026.6.3",
+      "license_expression": "MIT",
+      "license": null,
+      "project_urls": [
+        "Documentation, https://rpds.readthedocs.io/",
+        "Funding, https://github.com/sponsors/Julian",
+        "Homepage, https://github.com/crate-py/rpds",
+        "Issues, https://github.com/crate-py/rpds/issues/",
+        "Source, https://github.com/crate-py/rpds",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-rpds-py?utm_source=pypi-rpds-py&utm_medium=referral&utm_campaign=pypi-link",
+        "Upstream, https://github.com/orium/rpds"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/crate-py/rpds",
+      "files": [
+        {
+          "source": "rpds_py-2026.6.3.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/rpds-py-2026.6.3/rpds_py-2026.6.3.dist-info/licenses/LICENSE",
+          "sha256": "8bcb72c82ea8ae74802293c41d93ad7d51434001b0ae45a603a5af0f507aee0a"
+        }
+      ]
+    },
+    {
+      "name": "setuptools",
+      "version": "84.0.0",
+      "license_expression": "MIT",
+      "license": null,
+      "project_urls": [
+        "Source, https://github.com/pypa/setuptools",
+        "Documentation, https://setuptools.pypa.io/",
+        "Changelog, https://setuptools.pypa.io/en/stable/history.html"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/pypa/setuptools",
+      "files": [
+        {
+          "source": "setuptools-84.0.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools-84.0.0.dist-info/licenses/LICENSE",
+          "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741"
+        },
+        {
+          "source": "setuptools/_vendor/autocommand-2.2.2.dist-info/LICENSE",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools/_vendor/autocommand-2.2.2.dist-info/LICENSE",
+          "sha256": "ade78d04982d69972d444a8e14a94f87a2334dd3855cc80348ea8e240aa0df2d"
+        },
+        {
+          "source": "setuptools/_vendor/backports.tarfile-1.2.0.dist-info/LICENSE",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools/_vendor/backports.tarfile-1.2.0.dist-info/LICENSE",
+          "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741"
+        },
+        {
+          "source": "setuptools/_vendor/importlib_metadata-8.7.1.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools/_vendor/importlib_metadata-8.7.1.dist-info/licenses/LICENSE",
+          "sha256": "458502e12d97bbf64438606a20044aa85eb05fb0a8a807bb35dbec253fd1fc04"
+        },
+        {
+          "source": "setuptools/_vendor/jaraco.text-4.0.0.dist-info/LICENSE",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools/_vendor/jaraco.text-4.0.0.dist-info/LICENSE",
+          "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741"
+        },
+        {
+          "source": "setuptools/_vendor/jaraco_context-6.1.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools/_vendor/jaraco_context-6.1.0.dist-info/licenses/LICENSE",
+          "sha256": "9755a18519666e5f0f4cae3daad3d7012bcae48a600b31237d75e9fe134e6683"
+        },
+        {
+          "source": "setuptools/_vendor/jaraco_functools-4.4.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools/_vendor/jaraco_functools-4.4.0.dist-info/licenses/LICENSE",
+          "sha256": "5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d"
+        },
+        {
+          "source": "setuptools/_vendor/more_itertools-10.8.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools/_vendor/more_itertools-10.8.0.dist-info/licenses/LICENSE",
+          "sha256": "09f1c8c9e941af3e584d59641ea9b87d83c0cb0fd007eb5ef391a7e2643c1a46"
+        },
+        {
+          "source": "setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE",
+          "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48"
+        },
+        {
+          "source": "setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE.APACHE",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE.APACHE",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        },
+        {
+          "source": "setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE.BSD",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE.BSD",
+          "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5"
+        },
+        {
+          "source": "setuptools/_vendor/platformdirs-4.4.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools/_vendor/platformdirs-4.4.0.dist-info/licenses/LICENSE",
+          "sha256": "29e0fd62e929850e86eb28c3fdccf0cefdf4fa94879011cffb3d0d4bed6d4db6"
+        },
+        {
+          "source": "setuptools/_vendor/tomli-2.4.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools/_vendor/tomli-2.4.0.dist-info/licenses/LICENSE",
+          "sha256": "b80816b0d530b8accb4c2211783790984a6e3b61922c2b5ee92f3372ab2742fe"
+        },
+        {
+          "source": "setuptools/_vendor/wheel-0.46.3.dist-info/licenses/LICENSE.txt",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools/_vendor/wheel-0.46.3.dist-info/licenses/LICENSE.txt",
+          "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+        },
+        {
+          "source": "setuptools/_vendor/zipp-3.23.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/setuptools-84.0.0/setuptools/_vendor/zipp-3.23.0.dist-info/licenses/LICENSE",
+          "sha256": "5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d"
+        }
+      ]
+    },
+    {
+      "name": "sse-starlette",
+      "version": "3.4.11",
+      "license_expression": "BSD-3-Clause",
+      "license": null,
+      "project_urls": [
+        "Homepage, https://github.com/sysid/sse-starlette",
+        "Repository, https://github.com/sysid/sse-starlette",
+        "Issues, https://github.com/sysid/sse-starlette/issues",
+        "Source, https://github.com/sysid/sse-starlette"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/sysid/sse-starlette",
+      "files": [
+        {
+          "source": "sse_starlette-3.4.11.dist-info/licenses/AUTHORS",
+          "copy": "docs/licenses/sse-starlette-3.4.11/sse_starlette-3.4.11.dist-info/licenses/AUTHORS",
+          "sha256": "c2ff63d2ecf128bbda8ab1b2016830a5da124202fbb97168685bb9946aed3f1a"
+        },
+        {
+          "source": "sse_starlette-3.4.11.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/sse-starlette-3.4.11/sse_starlette-3.4.11.dist-info/licenses/LICENSE",
+          "sha256": "80af6bfccbebd2c14d4aab96695cab9950e177190cc80f5ef819e99996883e8e"
+        }
+      ]
+    },
+    {
+      "name": "starlette",
+      "version": "1.6.0",
+      "license_expression": "BSD-3-Clause",
+      "license": null,
+      "project_urls": [
+        "Homepage, https://github.com/Kludex/starlette",
+        "Documentation, https://starlette.dev/",
+        "Changelog, https://starlette.dev/release-notes/",
+        "Funding, https://github.com/sponsors/Kludex",
+        "Source, https://github.com/Kludex/starlette"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/Kludex/starlette",
+      "files": [
+        {
+          "source": "starlette-1.6.0.dist-info/licenses/LICENSE.md",
+          "copy": "docs/licenses/starlette-1.6.0/starlette-1.6.0.dist-info/licenses/LICENSE.md",
+          "sha256": "dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf"
+        }
+      ]
+    },
+    {
+      "name": "tomlkit",
+      "version": "0.15.1",
+      "license_expression": null,
+      "license": "MIT",
+      "project_urls": [
+        "Homepage, https://github.com/python-poetry/tomlkit",
+        "Repository, https://github.com/python-poetry/tomlkit"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/python-poetry/tomlkit",
+      "files": [
+        {
+          "source": "tomlkit-0.15.1.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/tomlkit-0.15.1/tomlkit-0.15.1.dist-info/licenses/LICENSE",
+          "sha256": "f2f9b460ba719da6626add264d3782f275a4ff7aab677beda08b330911e23adb"
+        }
+      ]
+    },
+    {
+      "name": "truststore",
+      "version": "0.10.4",
+      "license_expression": "MIT",
+      "license": null,
+      "project_urls": [
+        "Documentation, https://truststore.readthedocs.io",
+        "Source, https://github.com/sethmlarson/truststore"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/sethmlarson/truststore",
+      "files": [
+        {
+          "source": "truststore-0.10.4.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/truststore-0.10.4/truststore-0.10.4.dist-info/licenses/LICENSE",
+          "sha256": "33be7b7e8fa4fd19b1760e1a8ed8a668bdab852c91b692dd41424bcb725a9fca"
+        }
+      ]
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.4",
+      "license_expression": "MIT",
+      "license": null,
+      "project_urls": [
+        "Homepage, https://github.com/pydantic/typing-inspection",
+        "Documentation, https://pydantic.github.io/typing-inspection/dev/",
+        "Source, https://github.com/pydantic/typing-inspection",
+        "Changelog, https://github.com/pydantic/typing-inspection/blob/main/HISTORY.md"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/pydantic/typing-inspection",
+      "files": [
+        {
+          "source": "typing_inspection-0.4.4.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/typing-inspection-0.4.4/typing_inspection-0.4.4.dist-info/licenses/LICENSE",
+          "sha256": "804b59b25f2c31bd278f9202a19ae49a3945aa2664387e2d0a128c7cacc61ec3"
+        }
+      ]
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0",
+      "license_expression": "PSF-2.0",
+      "license": null,
+      "project_urls": [
+        "Bug Tracker, https://github.com/python/typing_extensions/issues",
+        "Changes, https://github.com/python/typing_extensions/blob/main/CHANGELOG.md",
+        "Documentation, https://typing-extensions.readthedocs.io/",
+        "Home, https://github.com/python/typing_extensions",
+        "Q & A, https://github.com/python/typing/discussions",
+        "Repository, https://github.com/python/typing_extensions"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/python/typing_extensions",
+      "files": [
+        {
+          "source": "typing_extensions-4.16.0.dist-info/licenses/LICENSE",
+          "copy": "docs/licenses/typing-extensions-4.16.0/typing_extensions-4.16.0.dist-info/licenses/LICENSE",
+          "sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
+        }
+      ]
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.53.0",
+      "license_expression": "BSD-3-Clause",
+      "license": null,
+      "project_urls": [
+        "Changelog, https://uvicorn.dev/release-notes",
+        "Funding, https://github.com/sponsors/Kludex",
+        "Homepage, https://uvicorn.dev/",
+        "Source, https://github.com/Kludex/uvicorn"
+      ],
+      "home_page": null,
+      "upstream_url": "https://github.com/Kludex/uvicorn",
+      "files": [
+        {
+          "source": "uvicorn-0.53.0.dist-info/licenses/LICENSE.md",
+          "copy": "docs/licenses/uvicorn-0.53.0/uvicorn-0.53.0.dist-info/licenses/LICENSE.md",
+          "sha256": "efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371"
+        }
+      ]
+    }
+  ]
+}

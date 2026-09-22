@@ -1,0 +1,20 @@
+{
+  "name": "xyquant",
+  "interface": {
+    "displayName": "XYQuant 因子市场"
+  },
+  "plugins": [
+    {
+      "name": "xyquant-factors",
+      "source": {
+        "source": "local",
+        "path": "./plugins/xyquant-factors"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

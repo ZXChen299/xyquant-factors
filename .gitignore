@@ -1,0 +1,13 @@
+.work/
+__pycache__/
+*.pyc
+.venv/
+build/
+dist/
+*.spec
+*.log
+credentials*
+*.dpapi
+*.sqlite*
+downloads/
+private/

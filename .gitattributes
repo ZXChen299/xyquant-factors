@@ -1,0 +1,6 @@
+# Preserve the exact bytes covered by release and third-party checksums.
+client/** -text
+requirements-build.lock -text
+docs/licenses/** -text
+plugins/xyquant-factors/docs/licenses/** -text
+*.exe binary

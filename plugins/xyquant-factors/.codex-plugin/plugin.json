@@ -1,0 +1,26 @@
+{
+  "name": "xyquant-factors",
+  "version": "0.1.0-rc.1+codex.20260922025242",
+  "description": "\u67e5\u8be2\u83b7\u6388\u6743\u7684\u56e0\u5b50\uff0c\u901a\u8fc7\u7f51\u9875\u767b\u5f55\u5e76\u4e0b\u8f7d\u5230\u5f53\u524d\u7814\u7a76\u9879\u76ee\u3002",
+  "author": {
+    "name": "XYQuant"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "XYQuant \u56e0\u5b50",
+    "shortDescription": "\u7f51\u9875\u767b\u5f55\u3001\u56e0\u5b50\u67e5\u8be2\u4e0e\u9879\u76ee\u6587\u4ef6\u4e0b\u8f7d",
+    "longDescription": "\u5728\u5bf9\u8bdd\u4e2d\u767b\u5f55\u56e0\u5b50\u8d26\u53f7\u3001\u67e5\u8be2\u8bf4\u660e\u548c\u6570\u503c\uff0c\u5c06\u5b8c\u6574\u5bfc\u51fa\u4e0b\u8f7d\u81f3\u5f53\u524d\u7814\u7a76\u9879\u76ee\u3002Windows x64\u3002",
+    "developerName": "XYQuant",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "\u67e5\u770b vol_entropy \u7684\u8bf4\u660e\uff0c\u5e76\u67e5\u8be2\u6307\u5b9a\u65e5\u671f\u548c\u80a1\u7968\u7684\u56e0\u5b50\u503c\u3002",
+      "\u5c06\u6211\u6307\u5b9a\u7684\u56e0\u5b50\u6570\u636e\u4e0b\u8f7d\u5230\u5f53\u524d\u7814\u7a76\u9879\u76ee\u3002"
+    ]
+  },
+  "mcpServers": "./.mcp.json",
+  "license": "MIT"
+}

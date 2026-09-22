@@ -1,0 +1,10 @@
+{
+  "version": "0.1.0",
+  "platform": "windows-x64",
+  "python": "3.12",
+  "signed": false,
+  "bytes": 22596000,
+  "sha256": "8b7f8f52c8e134b1303e693d092e69997620c9566d10ed548e4b1ef3ef895d5d",
+  "source_sha256": "2eb7ad816494ee69526d48d1a4799385b27d670c661047d241468d0c35456b5d",
+  "status": "candidate"
+}
