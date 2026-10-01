@@ -18,7 +18,7 @@ def tool_error(error):
     return ToolError(json.dumps({'code':error.code,'error':str(error)},ensure_ascii=False))
 
 logging.basicConfig(level=logging.WARNING)
-mcp=MCPServer('XYQuant Factors',version=VERSION,instructions='通过云端查询当前客户获授权因子。尚未登录时调用 start_login，随后 get_login_status，向客户展示授权链接，密码只在网站输入；不索取密码或 API Key，不要求打开连接助手。仅 login_required 才重新登录，权限不足不反复登录。预览最多50行，不能代替全量统计。下载使用真实项目绝对目录，创建导出后调用 download_export 并轮询 get_download，只有本地 ready 且 SHA-256 校验通过才报告成功。request_id 使用 UUID，重试同一请求时复用。',log_level='WARNING')
+mcp=MCPServer('XYQuant Factors',version=VERSION,instructions='通过云端查询当前客户获授权因子。尚未登录时调用 start_login，随后 get_login_status，向客户展示授权链接，密码只在网站输入；不索取密码或 API Key，不要求打开连接助手。仅 login_required 才重新登录，权限不足不反复登录。预览最多50行，不能代替全量统计。下载使用真实项目绝对目录，创建导出后调用 download_export 并轮询 get_download，只有本地 ready 且 SHA-256 校验通过才报告成功。request_id 使用 UUID，重试同一请求时复用。研究资料需research:read授权；使用目录version固定后续查询，保留来源、原表指标和警告，净值分页不能代表全量回测。',log_level='WARNING')
 
 async def call(name,data):
     from auth_client import AuthClient
@@ -73,6 +73,32 @@ async def get_export(job_id:str)->dict[str,Any]:
 async def list_exports()->dict[str,Any]:
     """列出当前客户的网页与 MCP 导出任务。"""
     return await call('list_exports',{})
+
+@mcp.tool(structured_output=True, annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True})
+async def list_strategies(search:str='',category:str='',page:int=1,page_size:int=20,version:str|None=None)->dict[str,Any]:
+    """搜索已发布策略，每页最多50条；返回version、来源和统计口径警告，需要research:read授权。"""
+    return await call('list_strategies',dict(search=search,category=category,page=page,page_size=page_size,version=version))
+
+@mcp.tool(structured_output=True, annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True})
+async def get_strategy_info(strategy_id:str,version:str|None=None)->dict[str,Any]:
+    """读取策略说明、报告标题、费用和样本外说明；使用目录返回的strategy_id和version。"""
+    return await call('get_strategy_info',dict(strategy_id=strategy_id,version=version))
+
+@mcp.tool(structured_output=True, annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True})
+async def get_strategy_performance(strategy_id:str,version:str|None=None)->dict[str,Any]:
+    """读取原表整体、年度和月度表现及其统计期间；不重算指标，不执行回测。"""
+    return await call('get_strategy_performance',dict(strategy_id=strategy_id,version=version))
+
+@mcp.tool(structured_output=True, annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True})
+async def get_strategy_nav(strategy_id:str,version:str,start:str|None=None,end:str|None=None,offset:int=0,limit:int=50)->dict[str,Any]:
+    """按日期读取净值分页，每页最多50行；翻页固定version，返回完整性标记，不能当全量回测。"""
+    return await call('get_strategy_nav',dict(strategy_id=strategy_id,version=version,start=start,end=end,offset=offset,limit=limit))
+
+@mcp.tool(structured_output=True, annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True})
+async def get_research_team(search:str='',page:int=1,page_size:int=20,version:str|None=None)->dict[str,Any]:
+    """分页查看已发布团队介绍及联系方式，最多50人；服务端重新验证客户和research:read授权。"""
+    return await call('get_research_team',dict(search=search,page=page,page_size=page_size,version=version))
+
 @mcp.tool(structured_output=True)
 def download_export(job_id:str,project_dir:str)->dict[str,Any]:
     """后台等待并下载到真实项目绝对目录下 downloads/factors/任务编号。返回本地下载 id，需调用 get_download 查询。"""

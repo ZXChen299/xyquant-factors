@@ -1,10 +1,12 @@
 # XYQuant 因子
 
+`v0.2.0-rc.1` 新增策略目录、原表表现、分页净值与团队介绍。有效新旧客户默认可访问全部已发布数据；旧 OAuth 连接调用研究工具前仍需客户明确重新授权。详见[研究资料 MCP](docs/research-mcp.md)和[本版验收记录](docs/acceptance-0.2.0-rc.1.md)。
+
 在 Codex 对话中查看股票因子、查询因子值，并把完整数据下载到当前研究项目。
 
 Windows 10/11 x64 插件内置运行程序，客户无需安装 Python、复制 API Key，或单独打开连接助手。因子网站管理账号与数据权限；插件通过浏览器完成账号授权。
 
-**当前版本：`v0.1.0-rc.1` 测试版。** [GitHub 仓库](https://github.com/ZXChen299/xyquant-factors)提供源码及市场目录。此版本用于试用验证，不代表全部客户验收完成；完整验收状态见[实际验收记录与限制](docs/acceptance.md)。
+**当前版本：`v0.2.0-rc.1` 测试版。** [GitHub 仓库](https://github.com/ZXChen299/xyquant-factors)提供源码及市场目录。此版本用于试用验证，不代表全部客户验收完成；本版验收状态见[实际验收记录与限制](docs/acceptance-0.2.0-rc.1.md)。
 
 **本次测试版需在登录和下载期间保持当前 Codex 对话运行。** 已测试的 Codex 版本会限制后台进程脱离宿主；结束对话或完全退出可能中断尚未完成的任务，重新打开后可查看中断状态并重试。一次执行就退出的 `codex exec` 不适合跨退出继续等待登录或下载。
 
@@ -13,7 +15,7 @@ Windows 10/11 x64 插件内置运行程序，客户无需安装 Python、复制 
 1. 在 Codex 插件市场添加本项目的 GitHub 来源，安装 **XYQuant 因子**。CLI 对应命令如下：
 
    ```powershell
-   codex plugin marketplace add https://github.com/ZXChen299/xyquant-factors.git --ref v0.1.0-rc.1
+   codex plugin marketplace add https://github.com/ZXChen299/xyquant-factors.git --ref v0.2.0-rc.1
    codex plugin add xyquant-factors@xyquant
    ```
 
@@ -45,6 +47,7 @@ Windows 10/11 x64 插件内置运行程序，客户无需安装 Python、复制 
 | 能力 | 工具 |
 |---|---|
 | 登录与连接状态 | `get_connection_status`、`start_login`、`get_login_status`、`disconnect` |
+| 策略与团队 | `list_strategies`、`get_strategy_info`、`get_strategy_performance`、`get_strategy_nav`、`get_research_team` |
 | 因子目录与说明 | `list_factors`、`get_factor_info` |
 | 最多 50 行数值预览 | `preview_factor` |
 | 云端导出与任务查询 | `create_export`、`get_export`、`list_exports` |

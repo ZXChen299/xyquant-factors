@@ -16,6 +16,9 @@ MESSAGES = {
     'invalid_request': '查询条件无效，请检查因子、日期、股票代码及请求参数。',
     'not_found': '因子或任务不存在，或不属于当前账号。',
     'source_unavailable': '源文件暂不可用或已更新，请稍后重试。',
+    'research_authorization_required': '当前连接没有研究资料授权。请在网站明确同意 research:read 后重试；已有因子授权继续有效。',
+    'version_changed': '研究资料已更新，请重新查询目录并使用新版本重新开始，不能拼接不同版本的数据。',
+    'content_unavailable': '研究中心尚未发布资料。',
     'idempotency_conflict': '同一请求编号已用于不同条件，请为新查询使用新的编号。',
     'cancelled': '导出任务已取消，请检查当前授权及任务状态。',
     'interrupted': '服务器重启中断了导出，请使用新的请求编号重新创建任务。',
@@ -26,6 +29,7 @@ ALIASES = {
     'invalid_key': 'login_required', 'invalid_grant': 'login_required',
     'customer_inactive': 'permission_denied', 'admin_required': 'permission_denied',
     'insufficient_scope': 'permission_denied', 'source_error': 'source_unavailable',
+    'research_storage_unavailable': 'source_unavailable',
 }
 
 

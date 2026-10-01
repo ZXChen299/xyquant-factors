@@ -1,6 +1,6 @@
 # 客户使用说明
 
-本文描述 `v0.1.0-rc.1` 测试版的使用流程，市场来源为 [GitHub 仓库](https://github.com/ZXChen299/xyquant-factors)。测试版有尚未完成的客户场景，请先查看[实际验收记录](acceptance.md)。
+本文描述 `v0.2.0-rc.1` 测试版的使用流程，市场来源为 [GitHub 仓库](https://github.com/ZXChen299/xyquant-factors)。测试版有尚未完成的客户场景，请先查看[本版验收记录](acceptance-0.2.0-rc.1.md)。
 
 **登录和下载完成前请保持当前 Codex 对话运行。** 当前验证版本限制后台任务独立于 Codex 运行；结束对话或完全退出可能中断任务，下一次查询会显示中断并允许重试。Codex 会在当前回合等待并查询进度，不应先结束回合让你稍后继续。一次运行就退出的 `codex exec` 不能用来跨退出等待任务。
 
@@ -11,7 +11,7 @@
 如果使用 Codex CLI，执行：
 
 ```powershell
-codex plugin marketplace add https://github.com/ZXChen299/xyquant-factors.git --ref v0.1.0-rc.1
+codex plugin marketplace add https://github.com/ZXChen299/xyquant-factors.git --ref v0.2.0-rc.1
 codex plugin add xyquant-factors@xyquant
 ```
 
@@ -32,6 +32,12 @@ codex plugin add xyquant-factors@xyquant
 > 查询 vol_entropy 在 2026-09-11 的 000001.SZ 因子值。
 
 预览最多返回 50 行。Codex 应标明因子、起止日期和股票条件。空值保持为空，无数据会明确提示。预览用于核对数值，不能代表完整结果的统计分布。
+
+## 查询策略与团队
+
+可以要求“搜索已发布的策略，查看说明、原表表现和净值”或“介绍研究团队”。工具返回版本、来源和统计期间；每页净值最多 50 行，不执行新回测。完整净值 CSV 和原始 Excel 从[受保护研究网页](https://47.103.215.251/factors/research)下载。
+
+有效新旧账号默认具有全部已发布数据访问权限，不需管理员逐项开通。已有因子 OAuth 连接不会自动增加 `research:read`。出现研究授权不足时，明确要求断开并重新登录，再在网页同意策略、净值和团队介绍（含联系方式）权限；此操作影响同一 Windows 用户共享的连接。原有因子查询不受此新增范围影响。
 
 ## 下载完整数据
 

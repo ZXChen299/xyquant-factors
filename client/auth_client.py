@@ -18,8 +18,8 @@ import webbrowser
 
 ORIGIN='https://47.103.215.251'
 RESOURCE=ORIGIN+'/mcp'
-VERSION='0.1.0'
-SCOPES='factors:read factors:export factors:download'
+VERSION='0.2.0-rc.1'
+SCOPES='factors:read factors:export factors:download research:read'
 
 
 class ClientError(Exception):

@@ -1,10 +1,10 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0-rc.1",
   "platform": "windows-x64",
   "python": "3.12",
   "signed": false,
-  "bytes": 22596000,
-  "sha256": "8b7f8f52c8e134b1303e693d092e69997620c9566d10ed548e4b1ef3ef895d5d",
-  "source_sha256": "2eb7ad816494ee69526d48d1a4799385b27d670c661047d241468d0c35456b5d",
+  "bytes": 22598835,
+  "sha256": "a20b0d870ce5a33bb842506c661c55228ff0e4fef6b057a01dad70fa418fda02",
+  "source_sha256": "522ec3190f9baa5efdc3437077c136a47786de7024fc1b7f2a23ad8a40b6543e",
   "status": "candidate"
 }
