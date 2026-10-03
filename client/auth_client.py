@@ -18,7 +18,7 @@ import webbrowser
 
 ORIGIN='https://47.103.215.251'
 RESOURCE=ORIGIN+'/mcp'
-VERSION='0.2.0-rc.1'
+VERSION='0.2.0-rc.2'
 SCOPES='factors:read factors:export factors:download research:read'
 
 
@@ -132,13 +132,19 @@ class AuthClient:
             return data['access_token']
 
     def invalidate(self,token=None):
-        """Forget only the access credential proven invalid, without deleting a newer refresh."""
-        with mutex('credentials',root=self.root):
-            if token is not None:
-                try:data=self._read()
-                except ClientError:return
-                if data.get('access_token')!=token:return
-            self.file.unlink(missing_ok=True)
+        """Best-effort local cleanup; server rejection does not wait for a refresh lock."""
+        try:
+            with mutex('credentials',timeout=0,root=self.root):
+                if token is not None:
+                    try:data=self._read()
+                    except ClientError as error:
+                        if error.code=='login_required':return
+                        raise
+                    if data.get('access_token')!=token:return
+                self.file.unlink(missing_ok=True)
+        except ClientError as error:
+            if error.code=='busy':return
+            raise
 
     def login(self,open_browser=webbrowser.open,on_ready=None,cancelled=None,timeout=300):
         """Authorize in a browser; open_browser=None leaves opening the link to the user."""

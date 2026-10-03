@@ -1,9 +1,10 @@
 import contextlib
 import asyncio
 import json
+import threading
 from types import SimpleNamespace
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
 import httpx2
 from mcp.shared.exceptions import MCPError
@@ -18,6 +19,8 @@ class RemoteTests(unittest.IsolatedAsyncioTestCase):
         self.auth.access.return_value='test-credential-never-display'
         self.result=SimpleNamespace(structured_content={'ok':True},content=[],is_error=False)
         self.error=None
+        self.handler=None
+        self.call_delay=0
         self.calls=[]
         owner=self
         class Client:
@@ -26,11 +29,14 @@ class RemoteTests(unittest.IsolatedAsyncioTestCase):
             async def __aexit__(self,*args):pass
             async def call_tool(self,tool,arguments):
                 owner.calls.append((tool,arguments))
+                if owner.call_delay:await asyncio.sleep(owner.call_delay)
+                if owner.handler:return await owner.handler(tool,arguments)
                 if owner.error:raise owner.error
                 return owner.result
         self.patches=contextlib.ExitStack()
         self.patches.enter_context(patch('remote.Client',Client))
         self.patches.enter_context(patch('remote.streamable_http_client',return_value=object()))
+        self.patches.enter_context(patch('remote.RETRY_DELAYS',(0,0)))
         self.addCleanup(self.patches.close)
 
     async def assert_failure(self,expected):
@@ -90,8 +96,139 @@ class RemoteTests(unittest.IsolatedAsyncioTestCase):
         self.result.content=[SimpleNamespace(text='unexpected Authorization: test-credential-never-display')]
         await self.assert_failure('remote_error')
 
+    async def test_read_retries_are_bounded_keep_arguments_trace_and_refresh_current_token(self):
+        self.auth.access.side_effect=['first-safe-token','second-safe-token','third-safe-token']
+        request=httpx2.Request('POST',RESOURCE)
+        async def handler(tool,arguments):
+            if len(self.calls)<3:raise httpx2.ConnectError('untrusted private transport text',request=request)
+            return self.result
+        self.handler=handler
+        arguments={'factor':'SYNTHETIC'}
+        with patch('remote.record') as log:
+            value=await remote.remote_call('get_factor_info',arguments,self.auth)
+        self.assertIs(value,self.result.structured_content)
+        self.assertEqual(len(self.calls),3)
+        self.assertTrue(all(args is arguments for _,args in self.calls))
+        self.assertEqual(self.auth.access.call_count,3)
+        self.auth.invalidate.assert_not_called()
+        self.assertEqual(len({call.args[-1] for call in log.call_args_list}),1)
+        transport=remote.streamable_http_client.call_args.kwargs['http_client']
+        self.assertEqual(transport.headers['Authorization'],'Bearer third-safe-token')
+        self.assertEqual(transport.headers['X-Request-ID'],log.call_args.args[-1])
+
+    async def test_refresh_transport_failure_is_never_replayed_or_invalidated(self):
+        self.auth.access.side_effect=ClientError('private refresh response lost','network_error')
+        await self.assert_failure('network_error')
+        self.auth.access.assert_called_once()
+        self.auth.invalidate.assert_not_called()
+        self.assertEqual(self.calls,[])
+
+    async def test_refresh_timeout_does_not_replay_or_send_tool_with_unknown_token(self):
+        finish=threading.Event()
+        def access():
+            finish.wait(0.2)
+            return 'late-synthetic-access-token'
+        self.auth.access.side_effect=access
+        try:
+            with patch('remote.CALL_BUDGET',0.05),self.assertRaises(ClientError) as raised:
+                await asyncio.wait_for(remote.remote_call('create_export',{'request_id':'12345678-1234-4234-8234-123456789abc'},self.auth),0.5)
+            self.assertEqual(raised.exception.code,'network_error')
+            self.auth.access.assert_called_once()
+            self.auth.invalidate.assert_not_called()
+            self.assertEqual(self.calls,[])
+        finally:finish.set()
+
+    async def test_unexpected_auth_io_error_is_sanitized_without_retry(self):
+        self.auth.access.side_effect=OSError('private account path and Authorization secret')
+        await self.assert_failure('remote_error')
+        self.auth.access.assert_called_once()
+        self.assertEqual(self.calls,[])
+
+    async def test_expired_budget_does_not_start_auth_or_extend_deadline(self):
+        with self.assertRaises(ClientError) as raised:
+            await remote.remote_call('list_exports',{},self.auth,deadline=0)
+        self.assertEqual(raised.exception.code,'network_error')
+        self.auth.access.assert_not_called()
+        self.assertEqual(self.calls,[])
+
+    async def test_inflight_read_timeout_is_bounded_and_never_invalidates_login(self):
+        self.call_delay=0.2
+        with patch('remote.CALL_BUDGET',0.05),self.assertRaises(ClientError) as raised:
+            await asyncio.wait_for(remote.remote_call('list_exports',{},self.auth),0.5)
+        self.assertEqual(raised.exception.code,'network_error')
+        self.assertEqual(len(self.calls),1)
+        self.auth.invalidate.assert_not_called()
+
+    async def test_create_response_lost_recovers_by_one_read_without_resubmitting(self):
+        business='12345678-1234-4234-8234-123456789abc'
+        job={'id':'a'*32,'status':'queued'}
+        async def handler(tool,arguments):
+            if tool=='create_export':raise httpx2.ConnectError('secret request body',request=httpx2.Request('POST',RESOURCE))
+            self.assertEqual((tool,arguments),('get_export',{'request_id':business}))
+            return SimpleNamespace(structured_content=job,content=[],is_error=False)
+        self.handler=handler
+        with patch('remote.record') as log:
+            result=await remote.remote_call('create_export',{'request_id':business},self.auth)
+        self.assertIs(result,job)
+        self.assertEqual([tool for tool,_ in self.calls],['create_export','get_export'])
+        self.assertEqual(len({call.args[-1] for call in log.call_args_list}),1)
+
+    async def test_create_not_found_after_lost_response_is_unknown_not_new_export(self):
+        business='12345678-1234-4234-8234-123456789abc'
+        async def handler(tool,arguments):
+            if tool=='create_export':raise httpx2.ReadTimeout('untrusted secret',request=httpx2.Request('POST',RESOURCE))
+            return SimpleNamespace(structured_content={'code':'not_found'},content=[],is_error=True)
+        self.handler=handler
+        with self.assertRaises(ClientError) as raised:
+            await remote.remote_call('create_export',{'request_id':business},self.auth)
+        self.assertEqual(raised.exception.code,'export_result_unknown')
+        self.assertEqual(raised.exception.request_id,business)
+        self.assertNotIn('untrusted',str(raised.exception))
+        self.assertEqual([tool for tool,_ in self.calls],['create_export','get_export'])
+
+    async def test_create_timeout_with_no_remaining_budget_preserves_business_id(self):
+        self.call_delay=0.2
+        business='12345678-1234-4234-8234-123456789abc'
+        with patch('remote.CALL_BUDGET',0.05),self.assertRaises(ClientError) as raised:
+            await asyncio.wait_for(remote.remote_call('create_export',{'request_id':business},self.auth),0.5)
+        self.assertEqual(raised.exception.code,'export_result_unknown')
+        self.assertEqual(raised.exception.request_id,business)
+        self.assertEqual([tool for tool,_ in self.calls],['create_export'])
+
+    async def test_create_and_reconciliation_auth_denials_remain_denials(self):
+        business='12345678-1234-4234-8234-123456789abc'
+        for denied_tool in ('create_export','get_export'):
+            for code in ('login_required','permission_denied'):
+                with self.subTest(denied_tool=denied_tool,code=code):
+                    self.calls.clear()
+                    async def handler(tool,arguments):
+                        if tool==denied_tool:return SimpleNamespace(structured_content={'code':code},content=[],is_error=True)
+                        raise httpx2.ConnectError('private',request=httpx2.Request('POST',RESOURCE))
+                    self.handler=handler
+                    with self.assertRaises(ClientError) as raised:
+                        await remote.remote_call('create_export',{'request_id':business},self.auth)
+                    self.assertEqual(raised.exception.code,code)
+                    self.assertEqual(len(self.calls),1 if denied_tool=='create_export' else 2)
+
+    async def test_create_reconciliation_network_failure_is_one_lookup_only(self):
+        self.error=httpx2.ConnectError('private',request=httpx2.Request('POST',RESOURCE))
+        with self.assertRaises(ClientError) as raised:
+            await remote.remote_call('create_export',{'request_id':'12345678-1234-4234-8234-123456789abc'},self.auth)
+        self.assertEqual(raised.exception.code,'export_result_unknown')
+        self.assertEqual([tool for tool,_ in self.calls],['create_export','get_export'])
+
+    async def test_invalid_trace_is_replaced_and_never_used_as_header(self):
+        await remote.remote_call('list_exports',{},self.auth,trace_id='unsafe\r\nAuthorization: private')
+        transport=remote.streamable_http_client.call_args.kwargs['http_client']
+        self.assertRegex(transport.headers['X-Request-ID'],r'^[a-f0-9]{32}$')
+
 
 class SDKTransportTests(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        self.fast_retries=patch('remote.RETRY_DELAYS',(0,0))
+        self.fast_retries.start()
+        self.addCleanup(self.fast_retries.stop)
+
     async def test_real_sdk_keeps_http_classification_when_sdk_synthesizes_mcp_error(self):
         client_class=remote._ObservedHTTPClient
         auth=Mock()

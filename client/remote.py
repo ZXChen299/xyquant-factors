@@ -1,10 +1,15 @@
 """Forward MCP calls without exposing transport exceptions or credentials."""
+import asyncio
 import json
+import re
+import time
 import httpx2
 from mcp.client import Client
 from mcp.client.streamable_http import streamable_http_client
 from mcp.shared.exceptions import MCPError
 from auth_client import AuthClient, ClientError, RESOURCE
+from diagnostics import record, trace_id as new_trace_id
+from auth_async import access as auth_access
 
 
 # Transport errors can contain headers. Use local messages and recognized codes.
@@ -23,7 +28,14 @@ MESSAGES = {
     'cancelled': '导出任务已取消，请检查当前授权及任务状态。',
     'interrupted': '服务器重启中断了导出，请使用新的请求编号重新创建任务。',
     'remote_error': '因子服务未能完成请求，请稍后重试。',
+    'export_result_unknown': '导出提交结果暂未确认。请保留原 request_id，先用 get_export(request_id=原编号) 核查；未找到不代表提交未执行。需要重试创建时必须使用原编号和完全相同条件，不要新建请求编号。',
 }
+READ_TOOLS = frozenset(('list_factors', 'get_factor_info', 'preview_factor', 'get_export',
+                        'list_exports', 'list_strategies', 'get_strategy_info',
+                        'get_strategy_performance', 'get_strategy_nav', 'get_research_team'))
+RETRY_CODES = frozenset(('network_error', 'busy'))
+RETRY_DELAYS = (1, 2)
+CALL_BUDGET = 50
 ALIASES = {
     'authentication_required': 'login_required', 'invalid_token': 'login_required',
     'invalid_key': 'login_required', 'invalid_grant': 'login_required',
@@ -117,28 +129,112 @@ def _failure(code, auth, token):
     return ClientError(MESSAGES[code], code)
 
 
-async def remote_call(tool, arguments, auth=None):
-    """Keep tool arguments/results unchanged; authentication is entirely local."""
-    auth = auth or AuthClient()
-    token = auth.access()
+class _AttemptFailure(ClientError):
+    def __init__(self, code, sent=False):
+        super().__init__(MESSAGES[code], code)
+        self.sent = sent
+
+
+async def _attempt(tool, arguments, token, trace, remaining):
+    """One SDK invocation; cancellation does not replay a mutating tool."""
     http = None
+    sent = False
     try:
-        async with _ObservedHTTPClient(
-            headers={'Authorization': 'Bearer ' + token}, timeout=50, trust_env=False
-        ) as http:
-            async with Client(streamable_http_client(RESOURCE, http_client=http)) as client:
-                result = await client.call_tool(tool, arguments)
-    except ClientError:
-        raise
+        async with asyncio.timeout(remaining):
+            async with _ObservedHTTPClient(
+                headers={'Authorization': 'Bearer ' + token, 'X-Request-ID': trace},
+                timeout=remaining, trust_env=False
+            ) as http:
+                async with Client(streamable_http_client(RESOURCE, http_client=http)) as client:
+                    sent = True
+                    result = await client.call_tool(tool, arguments)
     except Exception as error:
         code = http.failure if http is not None and http.failure else _exception_code(error)
-        raise _failure(code, auth, token) from None
+        raise _AttemptFailure(code, sent) from None
 
     content = result.structured_content
     if content is None:
         content = _payload(''.join(getattr(block, 'text', '') for block in result.content))
     if result.is_error:
-        raise _failure(_code(content), auth, token) from None
+        raise _AttemptFailure(_code(content), sent) from None
     if content is None:
-        raise ClientError('因子服务返回了无法识别的数据，请稍后重试。', 'remote_error')
+        raise _AttemptFailure('remote_error', sent)
     return content
+
+
+async def remote_call(tool, arguments, auth=None, *, trace_id=None, deadline=None, retry_reads=True):
+    """Bound read retries; never replay create_export or a rotating token refresh."""
+    auth = auth or AuthClient()
+    root = getattr(auth, 'root', None)
+    trace = new_trace_id(trace_id)
+    started = time.monotonic()
+    end = min(started + CALL_BUDGET, deadline) if deadline is not None else started + CALL_BUDGET
+    def log(stage, code):
+        record(root, tool, stage, (time.monotonic() - started) * 1000, code, trace)
+    def fail(code):
+        error = ClientError(MESSAGES[code], code)
+        error.trace_id = trace
+        return error
+    attempts = 1 + len(RETRY_DELAYS) if retry_reads and tool in READ_TOOLS else 1
+    for attempt in range(attempts):
+        remaining = end - time.monotonic()
+        if remaining <= 0:
+            log('complete', 'network_error')
+            raise fail('network_error')
+        # A refresh may rotate the token before its response is lost. Do not
+        # automatically replay auth.access() after an authentication transport error.
+        try:
+            token = await auth_access(auth, remaining)
+        except ClientError as error:
+            code = error.code if error.code in MESSAGES else 'remote_error'
+            log('auth', code)
+            raise fail(code) from None
+        except TimeoutError:
+            log('auth', 'network_error')
+            raise fail('network_error') from None
+        except Exception:
+            log('auth', 'remote_error')
+            raise fail('remote_error') from None
+        log('auth', 'ok')
+        remaining = end - time.monotonic()
+        if remaining <= 0:
+            log('complete', 'network_error')
+            raise fail('network_error')
+        try:
+            result = await _attempt(tool, arguments, token, trace, remaining)
+        except _AttemptFailure as error:
+            code = error.code
+            log('request', code)
+            if code == 'login_required':
+                auth.invalidate(token)
+            if tool == 'create_export' and error.sent and code in (RETRY_CODES | {'remote_error'}):
+                business_id = arguments.get('request_id') if isinstance(arguments, dict) else None
+                valid_id = isinstance(business_id, str) and re.fullmatch('[a-fA-F0-9]{8}-(?:[a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}', business_id)
+                # One read-only lookup may recover a committed export whose response
+                # was lost. A 404 is inconclusive: the original POST can still finish.
+                if valid_id and end > time.monotonic():
+                    log('reconcile', 'export_result_unknown')
+                    try:
+                        recovered = await remote_call('get_export', {'request_id': business_id}, auth,
+                                                      trace_id=trace, deadline=end, retry_reads=False)
+                    except ClientError as lookup_error:
+                        if lookup_error.code in ('login_required', 'permission_denied', 'research_authorization_required'):
+                            raise lookup_error from None
+                    else:
+                        log('complete', 'ok')
+                        return recovered
+                unknown = fail('export_result_unknown')
+                if valid_id:
+                    unknown.request_id = business_id
+                log('complete', unknown.code)
+                raise unknown from None
+            if code in RETRY_CODES and attempt + 1 < attempts:
+                delay = RETRY_DELAYS[attempt]
+                if time.monotonic() + delay < end:
+                    log('retry', code)
+                    await asyncio.sleep(delay)
+                    continue
+            log('complete', code)
+            raise fail(code) from None
+        log('complete', 'ok')
+        return result

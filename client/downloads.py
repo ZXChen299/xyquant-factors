@@ -21,6 +21,11 @@ import urllib.request
 from auth_client import AuthClient,ClientError,ORIGIN,app_dir,mutex
 from remote import remote_call
 from runtime import process_alive,runtime_status,spawn_worker
+from diagnostics import record,trace_id
+from auth_async import drain as drain_auth
+
+WAIT_BUDGET=2100
+WAIT_RETRY_DELAYS=(2,5)
 
 
 def safe_project(value):
@@ -171,6 +176,10 @@ class Downloads:
                         except ClientError as error:self.update(row['id'],status='failed',error=str(error),error_code=error.code)
                         except Exception:self.update(row['id'],status='failed',error='本地下载中断，请重试。',error_code='download_failed')
                 finally:
+                    # Job outcomes were persisted above. Keep only an already
+                    # running credential refresh alive long enough to save; never
+                    # start/replay authentication during worker shutdown.
+                    drain_auth(self.auth)
                     stopped.set();thread.join(timeout=4)
                     with self.db() as db:db.execute('DELETE FROM download_worker WHERE id=1 AND pid=?',(os.getpid(),))
         except ClientError as error:
@@ -178,14 +187,38 @@ class Downloads:
     def check_identity(self,row):
         if self.auth.identity()['customer_id']!=row['customer_id']:raise ClientError('当前登录账号已变化，请切回创建任务的账号。','account_changed')
     def perform(self,row):
-        self.check_identity(row);self.update(row['id'],status='waiting');deadline=time.monotonic()+2100
+        self.check_identity(row);self.update(row['id'],status='waiting')
+        started=time.monotonic();deadline=started+WAIT_BUDGET;trace=trace_id();failures=0
+        def diagnostic(stage,code):
+            record(self.root,'download_export',stage,(time.monotonic()-started)*1000,code,trace)
+        def wait(seconds):
+            remaining=deadline-time.monotonic()
+            if remaining<=0:
+                diagnostic('wait','wait_timeout')
+                raise ClientError('等待导出超时，云端任务未被取消；请复用原任务编号重试本地下载。','wait_timeout')
+            time.sleep(min(seconds,remaining))
         while True:
             self.check_identity(row)
-            job=asyncio.run(remote_call('get_export',dict(job_id=row['job_id']),self.auth))
+            if time.monotonic()>=deadline:
+                diagnostic('wait','wait_timeout')
+                raise ClientError('等待导出超时，云端任务未被取消；请复用原任务编号重试本地下载。','wait_timeout')
+            try:
+                job=asyncio.run(remote_call('get_export',dict(job_id=row['job_id']),self.auth,
+                    trace_id=trace,deadline=deadline,retry_reads=False))
+            except ClientError as error:
+                diagnostic('wait',error.code)
+                if time.monotonic()>=deadline:
+                    raise ClientError('等待导出超时，云端任务未被取消；请复用原任务编号重试本地下载。','wait_timeout') from None
+                if error.code not in ('network_error','busy') or failures>=len(WAIT_RETRY_DELAYS):raise
+                wait(WAIT_RETRY_DELAYS[failures]);failures+=1
+                continue
+            if time.monotonic()>=deadline:
+                diagnostic('wait','wait_timeout')
+                raise ClientError('等待导出超时，云端任务未被取消；请复用原任务编号重试本地下载。','wait_timeout')
+            failures=0
             if job['status']=='ready':break
             if job['status'] not in ('queued','running'):raise ClientError(job.get('error') or '云端文件已过期，请重新创建导出。',job.get('error_code') or 'export_expired')
-            if time.monotonic()>deadline:raise ClientError('等待导出超时，云端任务未被取消。','wait_timeout')
-            time.sleep(3)
+            wait(3)
         expected='/mcp/downloads/'+row['job_id']
         if job.get('oauth_download_url')!=expected:raise ClientError('下载地址校验失败。','invalid_response')
         filename=job.get('filename','')
@@ -212,7 +245,7 @@ class Downloads:
                 digest=hashlib.sha256();size=0
                 try:
                     token=self.auth.access()
-                    request=urllib.request.Request(ORIGIN+expected,headers={'Authorization':'Bearer '+token})
+                    request=urllib.request.Request(ORIGIN+expected,headers={'Authorization':'Bearer '+token,'X-Request-ID':trace})
                     with self.auth.opener.open(request,timeout=60) as response,partial.open('xb') as stream:
                         last=0
                         while True:
@@ -224,6 +257,7 @@ class Downloads:
                             if time.monotonic()-last>1:self.update(row['id'],bytes=size);last=time.monotonic();self.check_identity(row)
                     if size!=job['bytes']:raise urllib.error.URLError('Incomplete response')
                     if digest.hexdigest()!=job['sha256']:raise ClientError('文件 SHA-256 校验不符。','checksum_failed')
+                    diagnostic('download','ok')
                     break
                 except urllib.error.HTTPError as error:
                     if error.code==401:
@@ -233,6 +267,7 @@ class Downloads:
                     if error.code==404:raise ClientError('文件不存在、已过期或不属于当前客户。','export_expired') from None
                     if error.code not in (429,503) or attempt==2:raise ClientError('下载服务繁忙，请稍后重试。','busy') from None
                 except (urllib.error.URLError,http.client.IncompleteRead,TimeoutError,OSError) as error:
+                    diagnostic('download','download_interrupted')
                     if getattr(error,'errno',None)==errno.ENOSPC or getattr(error,'winerror',None)==112:
                         raise ClientError('本地磁盘空间不足，未完成文件已清理。请释放空间后重试。','disk_full') from None
                     if attempt==2:raise ClientError('网络或本地磁盘写入失败，请检查后重试。','download_interrupted') from None

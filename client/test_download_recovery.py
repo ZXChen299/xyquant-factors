@@ -137,5 +137,84 @@ class DownloadRecoveryTests(unittest.TestCase):
                 self.assertEqual(error.exception.code,'invalid_response')
                 self.assertFalse(list(self.project.rglob('*.partial')))
 
+    def test_poll_transient_errors_retry_same_job_and_trace_without_new_export(self):
+        calls=[]
+        async def remote(tool,arguments,auth,**kwargs):
+            calls.append((tool,arguments,kwargs))
+            if len(calls)<3:raise ClientError('synthetic temporary error',('network_error','busy')[len(calls)-1])
+            return self.job
+        with patch('downloads.remote_call',remote),patch('downloads.time.sleep') as sleep:
+            self.manager.run()
+        result=self.manager.get(self.task['id'])
+        self.assertEqual(result['status'],'ready')
+        self.assertEqual(result['sha256'],self.job['sha256'])
+        self.assertEqual([c[0] for c in calls],['get_export']*3)
+        self.assertTrue(all(c[1]=={'job_id':self.task['job_id']} for c in calls))
+        self.assertTrue(all(c[2]['retry_reads'] is False for c in calls))
+        self.assertEqual(len({c[2]['trace_id'] for c in calls}),1)
+        self.assertEqual(len({c[2]['deadline'] for c in calls}),1)
+        self.assertEqual([c.args[0] for c in sleep.call_args_list],[2,5])
+
+    def test_poll_retries_stop_after_three_failures_and_explicit_retry_reuses_task(self):
+        calls=[]
+        async def remote(tool,arguments,auth,**kwargs):
+            calls.append(tool)
+            raise ClientError('synthetic unavailable','network_error')
+        with patch('downloads.remote_call',remote),patch('downloads.time.sleep'):
+            self.manager.run()
+        result=self.manager.get(self.task['id'])
+        self.assertEqual(result['status'],'failed')
+        self.assertEqual(result['error_code'],'network_error')
+        self.assertEqual(calls,['get_export']*3)
+        retried=self.manager.start(self.task['job_id'],self.task['project'],spawn=False)
+        self.assertEqual(retried['id'],self.task['id'])
+        self.assertEqual(retried['status'],'queued')
+
+    def test_poll_auth_and_permission_errors_do_not_retry(self):
+        for code in ('login_required','permission_denied','cancelled','account_changed','not_found'):
+            with self.subTest(code=code):
+                calls=[]
+                async def remote(*args,**kwargs):
+                    calls.append(True)
+                    raise ClientError('synthetic denial',code)
+                with patch('downloads.remote_call',remote),patch('downloads.time.sleep') as sleep,self.assertRaises(ClientError) as raised:
+                    self.manager.perform(self.task)
+                self.assertEqual(raised.exception.code,code)
+                self.assertEqual(len(calls),1)
+                sleep.assert_not_called()
+
+    def test_poll_deadline_includes_backoff_and_is_never_reset(self):
+        clock=[0.0];calls=[];sleeps=[]
+        async def remote(*args,**kwargs):
+            calls.append(kwargs['deadline'])
+            raise ClientError('synthetic transient','busy')
+        def sleep(seconds):sleeps.append(seconds);clock[0]+=seconds
+        with patch('downloads.remote_call',remote),patch('downloads.time.monotonic',side_effect=lambda:clock[0]),patch('downloads.time.sleep',side_effect=sleep),patch('downloads.WAIT_BUDGET',5),self.assertRaises(ClientError) as raised:
+            self.manager.perform(self.task)
+        self.assertEqual(raised.exception.code,'wait_timeout')
+        self.assertEqual(calls,[5,5])
+        self.assertEqual(sleeps,[2,3])
+        self.assertEqual(clock[0],5)
+        self.assertFalse(list(self.project.rglob('*.partial')))
+
+    def test_poll_response_after_deadline_does_not_start_transfer(self):
+        clock=[0.0]
+        async def remote(*args,**kwargs):clock[0]=6;return self.job
+        with patch('downloads.remote_call',remote),patch('downloads.time.monotonic',side_effect=lambda:clock[0]),patch('downloads.WAIT_BUDGET',5),patch.object(self.manager.auth.opener,'open') as download,self.assertRaises(ClientError) as raised:
+            self.manager.perform(self.task)
+        self.assertEqual(raised.exception.code,'wait_timeout')
+        download.assert_not_called()
+
+    def test_poll_failure_budget_resets_only_after_successful_status(self):
+        calls=[]
+        async def remote(*args,**kwargs):
+            calls.append(True)
+            if len(calls) in (1,2,4,5):raise ClientError('synthetic transient','network_error')
+            return {**self.job,'status':'running'} if len(calls)==3 else self.job
+        with patch('downloads.remote_call',remote),patch('downloads.time.sleep'):
+            self.manager.perform(self.task)
+        self.assertEqual(len(calls),6)
+        self.assertEqual(self.manager.get(self.task['id'])['status'],'ready')
+
 
 if __name__=='__main__':unittest.main()

@@ -1,5 +1,9 @@
 # Preserve the exact bytes covered by release and third-party checksums.
 client/** -text
+scripts/** -text
+.github/workflows/** -text
+plugins/xyquant-factors/release.json -text
+plugins/xyquant-factors/bin/*.sha256 -text
 requirements-build.lock -text
 docs/licenses/** -text
 plugins/xyquant-factors/docs/licenses/** -text

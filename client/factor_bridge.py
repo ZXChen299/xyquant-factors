@@ -15,7 +15,10 @@ from login_tasks import LoginTasks
 STATE_ROOT = None
 
 def tool_error(error):
-    return ToolError(json.dumps({'code':error.code,'error':str(error)},ensure_ascii=False))
+    value={'code':error.code,'error':str(error)}
+    for key in ('request_id','trace_id'):
+        if hasattr(error,key):value[key]=getattr(error,key)
+    return ToolError(json.dumps(value,ensure_ascii=False))
 
 logging.basicConfig(level=logging.WARNING)
 mcp=MCPServer('XYQuant Factors',version=VERSION,instructions='通过云端查询当前客户获授权因子。尚未登录时调用 start_login，随后 get_login_status，向客户展示授权链接，密码只在网站输入；不索取密码或 API Key，不要求打开连接助手。仅 login_required 才重新登录，权限不足不反复登录。预览最多50行，不能代替全量统计。下载使用真实项目绝对目录，创建导出后调用 download_export 并轮询 get_download，只有本地 ready 且 SHA-256 校验通过才报告成功。request_id 使用 UUID，重试同一请求时复用。研究资料需research:read授权；使用目录version固定后续查询，保留来源、原表指标和警告，净值分页不能代表全量回测。',log_level='WARNING')
@@ -66,9 +69,11 @@ async def create_export(factors:list[str],start:str,end:str,request_id:str,codes
     """创建云端导出任务；重试时复用 request_id。"""
     return await call('create_export',dict(factors=factors,start=start,end=end,request_id=request_id,codes=codes or []))
 @mcp.tool(structured_output=True)
-async def get_export(job_id:str)->dict[str,Any]:
-    """查询云端导出状态。"""
-    return await call('get_export',dict(job_id=job_id))
+async def get_export(job_id:str|None=None,request_id:str|None=None)->dict[str,Any]:
+    """查询自己的导出状态；job_id与原创建request_id二选一。提交结果不明时用原request_id核查，404不证明原提交未执行。"""
+    if (job_id is None)==(request_id is None):
+        raise tool_error(ClientError('job_id 与 request_id 必须恰好提供一个。','invalid_request'))
+    return await call('get_export',{key:value for key,value in dict(job_id=job_id,request_id=request_id).items() if value is not None})
 @mcp.tool(structured_output=True)
 async def list_exports()->dict[str,Any]:
     """列出当前客户的网页与 MCP 导出任务。"""

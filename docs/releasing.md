@@ -1,14 +1,14 @@
 # 构建、检查与固定版本发布
 
-本文面向维护者。客户安装随包的 Windows 程序，不执行这些构建步骤。发布仓库为 [`ZXChen299/xyquant-factors`](https://github.com/ZXChen299/xyquant-factors)，当前程序版本为 `v0.2.0-rc.1`。下文保留 `v0.1.0-rc.1` 作为历史流程示例；创建新发布时必须使用未发布的新版本，不能重复创建或改写现有标签。
+本文面向维护者。客户安装随包的 Windows 程序，不执行这些构建步骤。发布仓库为 [`ZXChen299/xyquant-factors`](https://github.com/ZXChen299/xyquant-factors)，当前已发布程序版本为 `v0.2.0-rc.1`，工作分支候选为 `0.2.0-rc.2`。下文保留 `v0.1.0-rc.1` 作为历史流程示例；创建新发布时必须使用未发布的新版本，不能重复创建或改写现有标签。
 
 ## 生成候选构建
 
-在独立的本项目仓库中操作，使用 Windows x64 和 Python 3.12。不要把包含服务器密钥、客户资料的外层工作区作为发布仓库。
+在独立的本项目仓库中操作，使用 Windows x64 和精确的 Python 3.12.14（64 位）。不要把包含服务器密钥、客户资料的外层工作区作为发布仓库。
 
 ```powershell
 py -3.12 -m venv .work/build-env
-.\.work\build-env\Scripts\python.exe -m pip install -r requirements-build.lock
+.\.work\build-env\Scripts\python.exe -m pip install --require-hashes --only-binary=:all: -r requirements-build.lock
 .\.work\build-env\Scripts\python.exe -B -m unittest discover -s client -p "test_*.py"
 ```
 
@@ -20,7 +20,7 @@ py -3.12 -m venv .work/build-env
 .\.work\build-env\Scripts\python.exe -B scripts/check_release.py
 ```
 
-许可证生成器验证每个锁定包的已安装版本，复制原始许可文本，输出来源路径和 SHA-256。不得将输出中的未声明许可字段凭印象补成 MIT。`scripts/build.py` 生成 `bin/FactorBridge.exe`、程序校验文件和 `release.json`，并把声明与许可原文复制进插件子目录，保证市场安装也包含这些文本。因此必须在构建前运行声明生成器。
+许可证生成器验证每个锁定包的已安装版本，复制原始许可文本，输出来源路径和 SHA-256。不得将输出中的未声明许可字段凭印象补成 MIT。先提交候选源码并确认工作树；构建会如实记录源码提交和 dirty 状态，以及每个构建输入的 SHA-256。构建输出须再单独审阅提交，保留原源码提交供追溯，不声称不同机器会生成逐字节相同 EXE。`scripts/build.py` 生成 `bin/FactorBridge.exe`、程序校验文件和 `release.json`，并把声明与许可原文复制进插件子目录，保证市场安装也包含这些文本。因此必须在构建前运行声明生成器。
 
 ## 发布前的实际验收
 
@@ -65,6 +65,12 @@ git push origin v0.1.0-rc.1
 
 发布后分别核验提交检查／工作流、发布资产摘要和线上健康状态；没有运行的 CI 记为未运行，不能把本地测试等同于 CI 成功。
 
-## 可选 GitHub Actions
+## Windows CI 候选流水线
 
-截至 2026-10-03，仓库未配置启用的 GitHub Actions 工作流，当前版本以已记录的本地测试和线上验收为依据。`scripts/github-actions-verify.yml` 是尚未启用的 Windows CI 模板；如后续需要启用，由维护者在具备相应工作流权限后放入 `.github/workflows/verify.yml` 并核验执行结果。客户安装插件不需要此步骤。
+`.github/workflows/verify-windows.yml` 与 `scripts/github-actions-verify.yml` 一致。工作流使用 `windows-2022`、精确 Python 3.12.14 x64、固定 Actions 提交和 wheel SHA-256。只申请 `contents: read`，不生成凭据、不自动打标签、不写 Release。
+
+流程为客户端测试 → 构建检查测试 → 干净构建 → 实际 EXE 离线工具发现 → 发布边界检查 → 候选制品上传（14 天保留）。`release.json` 记录 Python/架构、源码提交/dirty、逐输入摘要和 EXE 摘要。下载候选仍需正式验收，不视为签名稳定版。
+
+首次推送含工作流的提交要求现有 GitHub 登录拥有工作流写入权限；如果缺少，维护者在 GitHub 的安全授权流程中明确批准后再推送，不把令牌粘贴到聊天，也不创建长期 PAT 作为替代。未实际运行的 CI 必须标为未运行。
+
+候选构建不能替代真实浏览器交互、首次 Windows 用户安装与 Authenticode 签名验收。正式稳定发布前另行完成签名。

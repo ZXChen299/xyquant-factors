@@ -1,6 +1,6 @@
 {
   "name": "xyquant-factors",
-  "version": "0.2.0-rc.1",
+  "version": "0.2.0-rc.2",
   "description": "查询获授权的因子及已发布的策略和团队研究资料。",
   "author": {
     "name": "XYQuant"
