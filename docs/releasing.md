@@ -1,6 +1,6 @@
 # 构建、检查与固定版本发布
 
-本文面向维护者。客户安装随包的 Windows 程序，不执行这些构建步骤。发布仓库为 [`ZXChen299/xyquant-factors`](https://github.com/ZXChen299/xyquant-factors)，当前已发布程序版本为 `v0.2.0-rc.1`，工作分支候选为 `0.2.0-rc.2`。下文保留 `v0.1.0-rc.1` 作为历史流程示例；创建新发布时必须使用未发布的新版本，不能重复创建或改写现有标签。
+本文面向维护者。客户安装随包的 Windows 程序，不执行这些构建步骤。发布仓库为 [`ZXChen299/xyquant-factors`](https://github.com/ZXChen299/xyquant-factors)，本页的发布目标为 `v0.2.0-rc.2`；实际已发布版本以 GitHub Releases 为准。下文保留 `v0.1.0-rc.1` 作为历史流程示例；创建新发布时必须使用未发布的新版本，不能重复创建或改写现有标签。
 
 ## 生成候选构建
 
