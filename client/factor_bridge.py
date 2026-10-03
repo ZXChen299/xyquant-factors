@@ -5,7 +5,7 @@ import logging
 import sys
 from pathlib import Path
 from typing import Any
-from mcp.server import MCPServer
+from research_arguments import ExploreMCPServer as MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 from auth_client import ClientError,VERSION
 from remote import remote_call

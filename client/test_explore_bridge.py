@@ -10,6 +10,7 @@ import diagnostics
 import factor_bridge
 import remote
 from mcp.server.mcpserver.exceptions import ToolError
+from mcp.types import CallToolRequestParams
 
 
 EXPLORE = {'search_research', 'compare_strategies', 'get_research_updates'}
@@ -24,10 +25,56 @@ class ExploreBridgeTests(unittest.IsolatedAsyncioTestCase):
             self.assertTrue(tools[name].annotations.read_only_hint)
             self.assertTrue(tools[name].annotations.idempotent_hint)
             self.assertFalse(tools[name].annotations.destructive_hint)
+            self.assertIs(tools[name].input_schema['additionalProperties'], False)
         self.assertEqual(set(tools['compare_strategies'].input_schema['required']), {'strategy_ids', 'version'})
         self.assertIn('catalog_version', tools['search_research'].input_schema['properties'])
         self.assertIn('publication_cursor', tools['get_research_updates'].input_schema['properties'])
         self.assertEqual(auth_client.SCOPES, 'factors:read factors:export factors:download research:read')
+
+    async def test_protocol_handler_rejects_unknown_keys_and_sdk_coercion_before_forwarding(self):
+        valid_ids = ['s_' + 'a' * 12, 's_' + 'b' * 12]
+        cases = [
+            ('search_research', {'page': True}), ('search_research', {'page': '1'}),
+            ('search_research', {'query': 17}), ('search_research', {'kind': []}),
+            ('search_research', {'preview': 'synthetic-private-draft'}),
+            ('search_research', {'customer_id': 'synthetic-private-customer'}),
+            ('search_research', {'page_size': 51}), ('search_research', {'catalog_version': 'z' * 64}),
+            ('compare_strategies', {'strategy_ids': json.dumps(valid_ids), 'version': 'a' * 32}),
+            ('compare_strategies', {'strategy_ids': [valid_ids[0]] * 2, 'version': 'a' * 32}),
+            ('compare_strategies', {'strategy_ids': valid_ids, 'version': 'a' * 32, 'extra': 'synthetic-private'}),
+            ('get_research_updates', {'publication_cursor': True}),
+            ('get_research_updates', {'publication_cursor': '0'}),
+            ('get_research_updates', {'publication_cursor': 2 ** 63}),
+            ('get_research_updates', {'include_drafts': True}), ('get_research_updates', {'page_size': 21}),
+        ]
+        with patch('factor_bridge.call', new_callable=AsyncMock) as call:
+            for name, args in cases:
+                with self.subTest(name=name, args=args):
+                    result = await factor_bridge.mcp._handle_call_tool(None, CallToolRequestParams(name=name, arguments=args))
+                    self.assertTrue(result.is_error)
+                    text = ''.join(block.text for block in result.content)
+                    self.assertEqual(json.loads(text)['code'], 'invalid_request')
+                    self.assertNotIn('synthetic-private', text)
+            call.assert_not_called()
+
+    async def test_protocol_handler_preserves_null_versions_and_zero_publication_cursor(self):
+        cases = [
+            ('search_research', dict(query='', kind='all', page=2, page_size=1, version=None, catalog_version='a' * 64)),
+            ('get_research_updates', dict(page=2, page_size=1, publication_cursor=0)),
+            ('compare_strategies', dict(strategy_ids=['s_' + 'a' * 12, 's_' + 'b' * 12], version='c' * 32)),
+        ]
+        with patch('factor_bridge.call', new_callable=AsyncMock, return_value={'synthetic': None}) as call:
+            for name, args in cases:
+                result = await factor_bridge.mcp._handle_call_tool(None, CallToolRequestParams(name=name, arguments=args))
+                self.assertFalse(result.is_error)
+                call.assert_awaited_with(name, args)
+
+    async def test_existing_tool_sdk_compatibility_is_unchanged(self):
+        with patch('factor_bridge.call', new_callable=AsyncMock, return_value={'factors': []}) as call:
+            result = await factor_bridge.mcp._handle_call_tool(None, CallToolRequestParams(
+                name='list_factors', arguments={'page': True, 'legacy_extra': 'ignored'}))
+            self.assertFalse(result.is_error)
+            call.assert_awaited_once_with('list_factors', dict(search='', page=1, page_size=20))
 
     async def test_search_pagination_retains_explicit_null_research_version(self):
         args = dict(query='synthetic', kind='all', page=2, page_size=1, version=None, catalog_version='c' * 64)
