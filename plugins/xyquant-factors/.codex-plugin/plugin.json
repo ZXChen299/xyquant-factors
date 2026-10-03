@@ -1,15 +1,15 @@
 {
   "name": "xyquant-factors",
-  "version": "0.2.0-rc.2",
-  "description": "查询获授权的因子及已发布的策略和团队研究资料。",
+  "version": "0.3.0-rc.1",
+  "description": "统一搜索获授权因子、策略和团队，查看原表策略对比、发布更新并下载因子。",
   "author": {
     "name": "XYQuant"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "XYQuant 因子",
-    "shortDescription": "因子查询下载、策略表现与团队介绍",
-    "longDescription": "在对话中登录账号、查询因子和下载数据，查看已发布策略说明、原表表现、分页净值及团队介绍。Windows x64 预发布版，需配套服务端及客户研究授权。",
+    "shortDescription": "统一搜索、策略原表对比与发布更新",
+    "longDescription": "在对话中登录账号、查询并下载因子，统一搜索已发布策略与团队、并列原表表现、查看净值和发布更新。Windows x64 未签名候选版，需配套服务端及现有对应授权。",
     "developerName": "XYQuant",
     "category": "Productivity",
     "capabilities": [
@@ -19,7 +19,8 @@
     "defaultPrompt": [
       "查看 vol_entropy 的说明，并查询指定日期和股票的因子值。",
       "将我指定的因子数据下载到当前研究项目。",
-      "查看已发布策略的说明和原表表现，并介绍团队研究方向。"
+      "统一搜索已发布策略和因子，固定版本并列两个策略的原表表现。",
+      "查看软件与研究资料的发布更新，区分发布时间和净值截止日。"
     ]
   },
   "mcpServers": "./.mcp.json",

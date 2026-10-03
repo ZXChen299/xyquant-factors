@@ -14,7 +14,7 @@ RESEARCH = {'list_strategies', 'get_strategy_info', 'get_strategy_performance',
 class ResearchBridgeTests(unittest.IsolatedAsyncioTestCase):
     async def test_discovery_keeps_existing_tools_and_requires_nav_version(self):
         tools = {tool.name: tool for tool in await factor_bridge.mcp.list_tools()}
-        self.assertEqual(len(tools), 17)
+        self.assertEqual(len(tools), 20)
         self.assertTrue(RESEARCH <= tools.keys())
         self.assertTrue({'start_login', 'preview_factor', 'download_export', 'disconnect'} <= tools.keys())
         for name in RESEARCH:

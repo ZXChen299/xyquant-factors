@@ -8,9 +8,9 @@ from mcp.server.mcpserver.exceptions import ToolError
 
 
 class ExportRecoveryBridgeTests(unittest.IsolatedAsyncioTestCase):
-    async def test_existing_job_and_business_request_lookup_keep_seventeen_tools(self):
+    async def test_existing_job_and_business_request_lookup_keep_twenty_tools(self):
         tools={tool.name:tool for tool in await factor_bridge.mcp.list_tools()}
-        self.assertEqual(len(tools),17)
+        self.assertEqual(len(tools),20)
         self.assertIn('request_id',tools['get_export'].input_schema['properties'])
         for args in ({'job_id':'a'*32},{'request_id':'12345678-1234-4234-8234-123456789abc'}):
             with patch('factor_bridge.call',new_callable=AsyncMock,return_value={'status':'queued'}) as call:

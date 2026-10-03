@@ -11,6 +11,7 @@ MAX_BYTES = 256 * 1024
 TOOLS = frozenset(('list_factors', 'get_factor_info', 'preview_factor', 'create_export',
                    'get_export', 'list_exports', 'list_strategies', 'get_strategy_info',
                    'get_strategy_performance', 'get_strategy_nav', 'get_research_team',
+                   'search_research', 'compare_strategies', 'get_research_updates',
                    'download_export'))
 STAGES = frozenset(('auth', 'request', 'retry', 'reconcile', 'complete', 'wait', 'download'))
 CODES = frozenset(('ok', 'login_required', 'permission_denied', 'busy', 'network_error',

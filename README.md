@@ -2,9 +2,9 @@
 
 通过 Windows Codex 插件查询股票因子、下载完整因子数据，查看团队已发布的策略说明、表现、净值和人员介绍。配套网站提供研究结果图表及受保护文件下载。客户使用自己的 Codex／大模型环境；本项目提供数据访问和研究工具，不提供云端大模型或新的在线回测引擎。
 
-**本页介绍 `v0.2.0-rc.2` 预发布版**。请在 [GitHub Releases](https://github.com/ZXChen299/xyquant-factors/releases) 确认该标签及校验文件已发布后安装。程序未签名，尚不宣称全部客户环境验收完成；[本版验收记录](docs/acceptance-0.2.0-rc.2.md)区分本地测试、CI 与线上检查。
+**本页介绍 `v0.3.0-rc.1` 未签名候选版**。请在 [GitHub Releases](https://github.com/ZXChen299/xyquant-factors/releases) 确认该标签及校验文件已发布后安装。候选不代表稳定交付；[本版验收记录](docs/acceptance-0.3.0-rc.1.md)区分本地测试、构建、CI 与线上检查。
 
-本版完善网络重试、导出结果核对、安全诊断及固定输入的 Windows CI。配套网站已有研究中心；具体上线结果以 Release 说明为准，候选构建不等于生产上线。既有 [rc.1 线上验收记录](docs/acceptance-0.2.0-rc.1.md)保留为历史证据。
+本版新增统一搜索、同版本策略原表对比和软件／研究资料发布更新，沿用已有网络重试、安全诊断与固定输入的 Windows CI。配套功能的上线结果以 Release 说明为准；既有 [0.2.0-rc.2 验收记录](docs/acceptance-0.2.0-rc.2.md)保留为历史证据，不能代替本候选验收。
 
 ## 访问入口
 
@@ -21,10 +21,10 @@
 
 支持 Windows 10/11 x64 的本地 Codex。插件自带运行程序，无需另装 Python、复制 API Key 或单独打开连接助手。
 
-1. 在 Codex 插件市场添加本项目 GitHub 来源，选择固定版本 `v0.2.0-rc.2`，安装 **XYQuant 因子**。使用已配置 Codex CLI 时：
+1. 在 Codex 插件市场添加本项目 GitHub 来源，选择已发布的固定版本 `v0.3.0-rc.1`，安装 **XYQuant 因子**。使用已配置 Codex CLI 时：
 
    ```powershell
-   codex plugin marketplace add https://github.com/ZXChen299/xyquant-factors.git --ref v0.2.0-rc.2
+   codex plugin marketplace add https://github.com/ZXChen299/xyquant-factors.git --ref v0.3.0-rc.1
    codex plugin add xyquant-factors@xyquant
    ```
 
@@ -50,13 +50,18 @@
 | 策略目录与详情 | `list_strategies`、`get_strategy_info` |
 | 原表表现与净值分页 | `get_strategy_performance`、`get_strategy_nav` |
 | 团队介绍及已发布联系方式 | `get_research_team` |
+| 因子、策略、团队统一搜索 | `search_research` |
+| 同版本 2–4 个策略原表对比 | `compare_strategies` |
+| 软件版本及研究发布事件 | `get_research_updates` |
 | 完整净值 CSV、原始 Excel 及图表 | 受保护研究中心；研究工具返回网页入口 |
 
-本地插件提供 17 个工具，远端 MCP 提供其中 11 个数据工具；登录管理和本地文件下载由 Windows 插件完成。
+本地插件提供 20 个工具，远端 MCP 提供其中 14 个数据工具；登录管理和本地文件下载由 Windows 插件完成。
 
 因子预览最多 50 行，完整数据下载到 `<项目目录>/downloads/factors/<任务编号>/`，校验大小和 SHA-256 后才算完成。每个导出最多 10 个因子、200 个指定股票代码、5,000 万行、1 GiB、30 分钟；完成文件保留一小时。
 
 净值每页最多 50 行，翻页固定同一 `version`。研究结果保留来源、统计期间、原始指标名称、空值和资料警告；日期筛选不重算表现指标。预览和分页结果不代表全量回测。本版不执行新回测、排名或指标重算。
+
+统一搜索只显示现有授权可见的类型，翻页固定研究 `version` 和因子 `catalog_version`。策略对比保留客户选择顺序；期间不同或缺失时不作收益排名。发布更新区分软件版本、资料发布时间与原始净值截止日，翻页固定 `publication_cursor`；不会自动升级软件或申请新授权。
 
 ## 账号与 OAuth
 
@@ -75,7 +80,7 @@
 
 ## 从旧版本升级
 
-- 固定在 `v0.1.0-rc.1` 的客户需将市场来源选择为 `v0.2.0-rc.2`，再按 Codex 提示更新或重新安装插件；只刷新旧固定标签不会变成新版。
+- 固定在旧标签的客户需在确认新 Release 已发布后，将市场来源选择为 `v0.3.0-rc.1`，再按 Codex 提示更新或重新安装插件；只刷新旧固定标签不会变成新版。既有旧独立 MCP 入口保留，只有明确要求迁移时才移除。
 - 新增工具需要客户端刷新工具列表，按界面提示重新打开会话。仅更新同一 Windows 用户的默认连接时，插件下一次调用会读取新凭据；已验证同一 `0.2.0-rc.1` 进程无需重启即可读取新连接。
 - 服务端上线、GitHub 文档更新和本机连接切换是不同操作。网站更新不会替客户升级插件或同意 OAuth 授权。
 
@@ -84,7 +89,7 @@
 - [客户使用说明](docs/customer-guide.md)：安装、网页登录、升级和常见问题。
 - [研究工具说明](docs/research-mcp.md)：数据版本、统计口径和权限边界。
 - [管理员说明](docs/admin-guide.md) · [旧独立连接迁移](docs/migration.md)。
-- [本版实际验收](docs/acceptance-0.2.0-rc.2.md) · [早期验收记录](docs/acceptance.md)。
+- [本版候选验收](docs/acceptance-0.3.0-rc.1.md) · [早期验收记录](docs/acceptance.md)。
 - [构建与发布](docs/releasing.md) · [更新记录](CHANGELOG.md)。
 
 公开仓库包含客户端源码、插件、合成测试和 Windows 构建产物。服务端源码、真实研究资料、客户身份和凭据留在私有环境。本分支提供 `.github/workflows/verify-windows.yml`：在干净 Windows 运行器测试、构建并上传候选制品，仅读仓库，不自动发布。是否已启用和通过以对应提交的 Actions 记录为准；没有运行的 CI 仍标为未运行。

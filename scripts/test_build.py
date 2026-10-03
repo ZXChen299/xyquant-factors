@@ -11,6 +11,22 @@ import check_release
 
 
 class BuildTests(unittest.TestCase):
+    def test_shipped_tool_and_safe_read_allowlists_match_contract(self):
+        self.assertEqual(check_release.validate_tool_contract(),dict(client_tools=20,remote_tools=14))
+
+    def test_release_rejects_missing_tool_or_mutating_retry_allowlist(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);(root/'client').mkdir()
+            for name in ('factor_bridge.py','remote.py','diagnostics.py'):
+                (root/'client'/name).write_bytes((check_release.ROOT/'client'/name).read_bytes())
+            remote_path=root/'client/remote.py';original=remote_path.read_text(encoding='utf8')
+            remote_path.write_text(original.replace("READ_TOOLS = frozenset((", "READ_TOOLS = frozenset(('create_export', ",1),encoding='utf8')
+            with self.assertRaisesRegex(ValueError,'exclude export creation'):check_release.validate_tool_contract(root)
+            remote_path.write_text(original,encoding='utf8')
+            bridge=root/'client/factor_bridge.py';text=bridge.read_text(encoding='utf8')
+            bridge.write_text(text.replace('async def search_research(', 'async def accidental_other_name(',1),encoding='utf8')
+            with self.assertRaisesRegex(ValueError,'20 expected tools'):check_release.validate_tool_contract(root)
+
     def test_runtime_rejects_32bit_arm_and_unpinned_python(self):
         good=dict(os_name='nt',version='3.12.14',pointer_bits=64,machine='AMD64')
         self.assertEqual(build.validate_runtime(**good)['pointer_bits'],64)

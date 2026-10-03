@@ -1,6 +1,6 @@
 # 客户使用说明
 
-本文描述 `v0.2.0-rc.2` 测试版的使用流程，市场来源为 [GitHub 仓库](https://github.com/ZXChen299/xyquant-factors)。测试版有尚未完成的客户场景，请先查看[本版验收记录](acceptance-0.2.0-rc.2.md)。
+本文描述 `v0.3.0-rc.1` 未签名候选版的使用流程，市场来源为 [GitHub 仓库](https://github.com/ZXChen299/xyquant-factors)。候选有尚未完成的客户场景，请先查看[本版验收记录](acceptance-0.3.0-rc.1.md)，确认 Release 已发布再安装。
 
 **登录和下载完成前请保持当前 Codex 对话运行。** 当前验证版本限制后台任务独立于 Codex 运行；结束对话或完全退出可能中断任务，下一次查询会显示中断并允许重试。Codex 会在当前回合等待并查询进度，不应先结束回合让你稍后继续。一次运行就退出的 `codex exec` 不能用来跨退出等待任务。
 
@@ -8,10 +8,10 @@
 
 在 Windows 10/11 x64 上安装并登录 Codex。在插件市场添加维护者提供的 XYQuant GitHub 来源，选择 **XYQuant 因子** 并安装。插件已经包含所需运行程序，不需要另装 Python 或连接助手。
 
-先在 GitHub Releases 确认 `v0.2.0-rc.2` 已发布；如果使用 Codex CLI，执行：
+先在 GitHub Releases 确认 `v0.3.0-rc.1` 已发布；如果使用 Codex CLI，执行：
 
 ```powershell
-codex plugin marketplace add https://github.com/ZXChen299/xyquant-factors.git --ref v0.2.0-rc.2
+codex plugin marketplace add https://github.com/ZXChen299/xyquant-factors.git --ref v0.3.0-rc.1
 codex plugin add xyquant-factors@xyquant
 ```
 
@@ -23,7 +23,7 @@ codex plugin add xyquant-factors@xyquant
 
 ## 从旧版本升级
 
-如果市场来源固定在 `v0.1.0-rc.1`，先将该来源选择为 `v0.2.0-rc.2`，再按 Codex 提示更新或重新安装插件。刷新旧固定标签不会自动升级到另一个标签。看到新增工具通常需要重新打开会话；仅切换已明确获准的默认连接时，下一次调用会读取当前凭据，已验证同一 `0.2.0-rc.1` 进程无需重启。
+如果市场来源固定在旧标签，确认新 Release 已发布后再将该来源选择为 `v0.3.0-rc.1`，按 Codex 提示更新或重新安装插件。刷新旧固定标签不会自动升级到另一个标签。看到新增工具通常需要重新打开会话；仅切换已明确获准的默认连接时，下一次调用会读取当前凭据。旧独立 MCP 配置不会随升级自动移除，需明确要求迁移后按[迁移说明](migration.md)操作。
 
 账号可访问研究资料不代表旧插件连接已获 `research:read`。出现 `research_authorization_required` 时，由客户明确选择断开并重新登录，再在网页确认研究范围；`start_login` 会复用已有连接，反复调用不能自动扩权。不要把权限不足误当成网站故障。
 
@@ -44,6 +44,12 @@ codex plugin add xyquant-factors@xyquant
 可以要求“搜索已发布的策略，查看说明、原表表现和净值”或“介绍研究团队”。工具返回版本、来源和统计期间；每页净值最多 50 行，不执行新回测。完整净值 CSV 和原始 Excel 从[受保护研究网页](https://47.103.215.251/factors/research)下载。
 
 有效新旧账号默认具有全部已发布数据访问权限，不需管理员逐项开通。已有因子 OAuth 连接不会自动增加 `research:read`。出现研究授权不足时，明确要求断开并重新登录，再在网页同意策略、净值和团队介绍（含联系方式）权限；此操作影响同一 Windows 用户共享的连接。原有因子查询不受此新增范围影响。
+
+## 统一搜索、对比与更新
+
+可以要求“统一搜索波动率相关因子、策略和团队”“固定同一版本，并列比较这两个策略的原表表现”或“分别查看软件更新和研究资料发布记录”。搜索按现有 scope 返回可见类别，最多每页 50 条；缺少研究授权时不会显示或统计研究内容，不需要为继续已有因子查询而重新登录。
+
+比较一次支持 2–4 个不同策略，保留原表指标和统计期间、空值及来源；期间不一致时明确提示，不据此排名或计算新指标。更新记录每页最多 20 条，软件版本、研究发布时间和净值截止日分别展示；回滚属于发布事件，不代表重新回测。版本或游标在翻页时固定，数据变化后重新从第一页查询。
 
 ## 下载完整数据
 

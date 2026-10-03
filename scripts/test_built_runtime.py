@@ -12,7 +12,8 @@ from mcp.client.stdio import stdio_client
 ROOT=Path(__file__).resolve().parents[1]
 EXPECTED={'get_connection_status','start_login','get_login_status','disconnect','list_factors','get_factor_info',
           'preview_factor','create_export','get_export','list_exports','list_strategies','get_strategy_info',
-          'get_strategy_performance','get_strategy_nav','get_research_team','download_export','get_download'}
+          'get_strategy_performance','get_strategy_nav','get_research_team','download_export','get_download',
+          'search_research','compare_strategies','get_research_updates'}
 
 
 async def check(binary,root,version):

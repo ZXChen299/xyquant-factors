@@ -104,6 +104,21 @@ async def get_research_team(search:str='',page:int=1,page_size:int=20,version:st
     """分页查看已发布团队介绍及联系方式，最多50人；服务端重新验证客户和research:read授权。"""
     return await call('get_research_team',dict(search=search,page=page,page_size=page_size,version=version))
 
+@mcp.tool(structured_output=True, annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True})
+async def search_research(query:str='',kind:str='all',page:int=1,page_size:int=20,version:str|None=None,catalog_version:str|None=None)->dict[str,Any]:
+    """统一搜索获授权的因子、已发布策略和团队；kind为all/factor/strategy/team，每页最多50条。翻页固定返回的version和catalog_version，不拼接更新前后结果。"""
+    return await call('search_research',dict(query=query,kind=kind,page=page,page_size=page_size,version=version,catalog_version=catalog_version))
+
+@mcp.tool(structured_output=True, annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True})
+async def compare_strategies(strategy_ids:list[str],version:str)->dict[str,Any]:
+    """并列2至4个唯一策略的原表指标与期间；必须使用同一已发布version，保留来源、null和警告，不排名、不重算。"""
+    return await call('compare_strategies',dict(strategy_ids=strategy_ids,version=version))
+
+@mcp.tool(structured_output=True, annotations={'readOnlyHint': True, 'destructiveHint': False, 'idempotentHint': True})
+async def get_research_updates(page:int=1,page_size:int=10,publication_cursor:int|None=None)->dict[str,Any]:
+    """区分软件版本与已发布数据事件，每页最多20条；后续页固定publication_cursor。发布时间不是净值截止日，不自动更新软件或申请新授权。"""
+    return await call('get_research_updates',dict(page=page,page_size=page_size,publication_cursor=publication_cursor))
+
 @mcp.tool(structured_output=True)
 def download_export(job_id:str,project_dir:str)->dict[str,Any]:
     """后台等待并下载到真实项目绝对目录下 downloads/factors/任务编号。返回本地下载 id，需调用 get_download 查询。"""
