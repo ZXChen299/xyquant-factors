@@ -14,10 +14,27 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
-        with:
-          python-version: '3.12.14'
-          architecture: x64
+      - name: Fetch verified portable CPython 3.12.14 x64
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $archive = Join-Path $env:RUNNER_TEMP 'xyquant-python-3.12.14.tar.gz'
+          $runtime = Join-Path $env:RUNNER_TEMP 'xyquant-python-3.12.14'
+          $url = 'https://github.com/astral-sh/python-build-standalone/releases/download/20260825/cpython-3.12.14%2B20260825-x86_64-pc-windows-msvc-install_only.tar.gz'
+          Invoke-WebRequest -Uri $url -OutFile $archive
+          $expected = '15d25c455ea25d6b24d7e58eabdf744fd0db3cfb977934ae08fd2237acd8ccc1'
+          if ((Get-FileHash -Algorithm SHA256 -LiteralPath $archive).Hash.ToLowerInvariant() -ne $expected) {
+            throw 'Portable Python archive SHA-256 mismatch'
+          }
+          New-Item -ItemType Directory -Path $runtime -ErrorAction Stop | Out-Null
+          tar -xzf $archive -C $runtime
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $pythonDir = Join-Path $runtime 'python'
+          if (-not (Test-Path -LiteralPath (Join-Path $pythonDir 'python.exe'))) {
+            throw 'Portable Python executable missing'
+          }
+          $pythonDir | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          (Join-Path $pythonDir 'Scripts') | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       - name: Verify interpreter and install hash-locked wheels
         shell: pwsh
         run: |

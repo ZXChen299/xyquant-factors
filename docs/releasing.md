@@ -74,3 +74,11 @@ git push origin v0.1.0-rc.1
 首次推送含工作流的提交要求现有 GitHub 登录拥有工作流写入权限；如果缺少，维护者在 GitHub 的安全授权流程中明确批准后再推送，不把令牌粘贴到聊天，也不创建长期 PAT 作为替代。未实际运行的 CI 必须标为未运行。
 
 候选构建不能替代真实浏览器交互、首次 Windows 用户安装与 Authenticode 签名验收。正式稳定发布前另行完成签名。
+
+CI obtains CPython 3.12.14 x64 from the immutable Astral
+`python-build-standalone` release `20260825` (`install_only`). It verifies SHA-256
+`15d25c455ea25d6b24d7e58eabdf744fd0db3cfb977934ae08fd2237acd8ccc1`
+before extraction into `RUNNER_TEMP`; only the job's `GITHUB_PATH` changes.
+The runtime is the same Python version, but is not claimed to be byte-identical
+to the local build interpreter. CI tests, rebuild, and executable smoke checks
+validate this upstream build. `actions/setup-python` has no Windows 3.12.14 asset.
