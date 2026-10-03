@@ -22,7 +22,9 @@ OAuth 研究访问需独立的 `research:read`。授权页面明确显示策略�
 
 后端沿用服务令牌、短时签名客户上下文及逐请求令牌／客户状态校验。普通网页 API 继续拒绝 OAuth；新工具只经 `/mcp` → `/internal/v1/tools/<tool>` 读取 `ResearchStore` 的已发布版本。API Key 仍按原有有效客户研究访问规则处理。没有逐策略授权、草稿读取、上传或发布工具。
 
-## 验证
+## 线上状态与验证
+
+2026-10-03 已通过真实客户本人确认的 OAuth 完成五个研究工具的线上读取、净值小样本翻页及已安装 EXE 调用，之后也验证了默认连接。数据版本、来源及原表口径均保留。详见[本版验收记录](acceptance-0.2.0-rc.1.md)；这些结果不代表其他客户已经完成授权。
 
 客户端：Python 3.12 环境运行 `python -B -m unittest discover -s client -p "test_*.py"`。构建使用既有 `scripts/build.py`；完成后运行 `scripts/check_release.py` 检查公开包边界及源码／EXE 摘要一致性。
 

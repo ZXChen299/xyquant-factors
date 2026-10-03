@@ -1,6 +1,6 @@
 # 构建、检查与固定版本发布
 
-本文面向维护者。客户安装随包的 Windows 程序，不执行这些构建步骤。发布仓库为 [`ZXChen299/xyquant-factors`](https://github.com/ZXChen299/xyquant-factors)，以下以 `v0.1.0-rc.1` 测试版说明发布流程。
+本文面向维护者。客户安装随包的 Windows 程序，不执行这些构建步骤。发布仓库为 [`ZXChen299/xyquant-factors`](https://github.com/ZXChen299/xyquant-factors)，当前程序版本为 `v0.2.0-rc.1`。下文保留 `v0.1.0-rc.1` 作为历史流程示例；创建新发布时必须使用未发布的新版本，不能重复创建或改写现有标签。
 
 ## 生成候选构建
 
@@ -59,6 +59,12 @@ git push origin v0.1.0-rc.1
 
 市场来源用于发现插件，发布基准是有明确验收记录的固定标签。客户教程使用 `--ref v0.1.0-rc.1` 固定该测试版本，不跟随开发分支的变化；本地 Codex 帮助已确认支持该参数。测试版不以稳定版名义交付，完整验收后再发布稳定版本并提供对应标签的升级说明。保留旧版本标签供回退，程序不自行下载更新并执行。
 
+## 仅文档更新
+
+当业务源码、构建产物和线上服务已经一致，README、使用说明及后续验收结果可以单独提交到 `main`。执行发布边界检查、相对链接检查和差异审阅后推送，再核验远端实际提交。Release 说明可以链接补充后的在线验收记录，但保留原标签、EXE、ZIP 和校验文件，不为说明更新重打包或重部署服务。固定发布包内的文档仍是原快照，应明确区别于 `main` 上的最新说明。
+
+发布后分别核验提交检查／工作流、发布资产摘要和线上健康状态；没有运行的 CI 记为未运行，不能把本地测试等同于 CI 成功。
+
 ## 可选 GitHub Actions
 
-当前发布使用本地测试验收。scripts/github-actions-verify.yml 提供 Windows CI 模板，尚未启用自动运行：发布用 GitHub CLI 凭据没有 workflow 权限。仓库维护者可在获得相应工作流管理权限后将模板放入 .github/workflows/verify.yml；客户安装插件不需要此步骤。
+截至 2026-10-03，仓库未配置启用的 GitHub Actions 工作流，当前版本以已记录的本地测试和线上验收为依据。`scripts/github-actions-verify.yml` 是尚未启用的 Windows CI 模板；如后续需要启用，由维护者在具备相应工作流权限后放入 `.github/workflows/verify.yml` 并核验执行结果。客户安装插件不需要此步骤。

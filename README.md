@@ -1,64 +1,90 @@
-# XYQuant 因子
+# XYQuant 因子与研究资料
 
-`v0.2.0-rc.1` 新增策略目录、原表表现、分页净值与团队介绍。有效新旧客户默认可访问全部已发布数据；旧 OAuth 连接调用研究工具前仍需客户明确重新授权。详见[研究资料 MCP](docs/research-mcp.md)和[本版验收记录](docs/acceptance-0.2.0-rc.1.md)。
+通过 Windows Codex 插件查询股票因子、下载完整因子数据，查看团队已发布的策略说明、表现、净值和人员介绍。配套网站提供研究结果图表及受保护文件下载。客户使用自己的 Codex／大模型环境；本项目提供数据访问和研究工具，不提供云端大模型或新的在线回测引擎。
 
-在 Codex 对话中查看股票因子、查询因子值，并把完整数据下载到当前研究项目。
+**当前版本：[v0.2.0-rc.1 预发布版](https://github.com/ZXChen299/xyquant-factors/releases/tag/v0.2.0-rc.1)**。配套网站与 MCP 已上线。2026-10-03 已完成真实账号授权、已安装插件查询、小样本导出下载及默认连接验证；[验收记录](docs/acceptance-0.2.0-rc.1.md)列明实际通过项与未覆盖场景。程序未签名，尚不宣称全部客户环境验收完成。
 
-Windows 10/11 x64 插件内置运行程序，客户无需安装 Python、复制 API Key，或单独打开连接助手。因子网站管理账号与数据权限；插件通过浏览器完成账号授权。
+## 访问入口
 
-**当前版本：`v0.2.0-rc.1` 测试版。** [GitHub 仓库](https://github.com/ZXChen299/xyquant-factors)提供源码及市场目录。此版本用于试用验证，不代表全部客户验收完成；本版验收状态见[实际验收记录与限制](docs/acceptance-0.2.0-rc.1.md)。
+| 入口 | 用途 |
+|---|---|
+| [因子网站](https://47.103.215.251/factors/) | 登录、查看因子、预览数值及管理导出 |
+| [研究中心](https://47.103.215.251/factors/research) | 策略介绍、原表表现、净值图表、团队介绍及受保护下载 |
+| [注册](https://47.103.215.251/factors/apply) · [连接管理](https://47.103.215.251/factors/connect) | 注册账号、管理客户端授权 |
+| [MCP 地址](https://47.103.215.251/mcp) | 插件连接的认证服务；浏览器匿名访问返回 401 属于预期行为 |
 
-**本次测试版需在登录和下载期间保持当前 Codex 对话运行。** 已测试的 Codex 版本会限制后台进程脱离宿主；结束对话或完全退出可能中断尚未完成的任务，重新打开后可查看中断状态并重试。一次执行就退出的 `codex exec` 不适合跨退出继续等待登录或下载。
+网站可打开不代表资料公开；实际数据请求需要有效客户身份和对应客户端授权。
 
-## 开始使用
+## 安装与开始使用
 
-1. 在 Codex 插件市场添加本项目的 GitHub 来源，安装 **XYQuant 因子**。CLI 对应命令如下：
+支持 Windows 10/11 x64 的本地 Codex。插件自带运行程序，无需另装 Python、复制 API Key 或单独打开连接助手。
+
+1. 在 Codex 插件市场添加本项目 GitHub 来源，选择固定版本 `v0.2.0-rc.1`，安装 **XYQuant 因子**。使用已配置 Codex CLI 时：
 
    ```powershell
    codex plugin marketplace add https://github.com/ZXChen299/xyquant-factors.git --ref v0.2.0-rc.1
    codex plugin add xyquant-factors@xyquant
    ```
 
-   首次添加市场来源只需一次。按客户端提示重新打开会话，使新增工具生效。
+2. 按 Codex 提示重新打开会话，在研究项目中说“连接我的 XYQuant 账号”。
+3. **在运行插件的同一台 Windows 电脑浏览器中**打开授权页，登录自己的账号并确认范围。密码只输入网站；不要发到聊天。链接约五分钟有效。
+4. 返回 Codex，提出需要的查询或下载，例如：
 
-2. 打开研究项目，在对话中输入：
+   > 搜索波动率相关因子，查看其中一个因子的说明和可查询日期。
 
-   > 查看 vol_entropy 的说明，并查询 2026-09-11 的 000001.SZ 因子值。
+   > 查询 vol_entropy 在 2026-09-11 的 000001.SZ 因子值，并将同条件完整数据下载到当前项目。
 
-3. 如果尚未登录，点击对话中的授权链接，在因子网站登录并允许连接。没有账号可先[注册](https://47.103.215.251/factors/apply)。授权完成后返回 Codex；若原对话已结束，回复“已登录，继续”。
+   > 搜索已发布策略，查看一个策略的说明、原表表现和净值，并介绍研究团队。
 
-4. 要保存完整数据，继续说：
+**登录和下载完成前保持当前 Codex 对话运行。** 已验证环境中的后台任务受宿主生命周期限制；退出可能中断未完成任务。不要用执行一次就退出的 `codex exec` 等待跨退出登录或下载。
 
-   > 把这些条件下的完整因子数据下载到当前项目，告诉我保存位置。
+## 功能
 
-文件写入 `<项目目录>/downloads/factors/<任务编号>/`。Codex 返回本地文件路径、大小和 SHA-256 校验结果。因子值在对话中最多预览 50 行；完整结果通过文件交付。
-
-## 文档
-
-- [客户使用说明](docs/customer-guide.md)：安装、登录、查询、下载和常见问题。
-- [管理员说明](docs/admin-guide.md)：账号开通、授权调整及连接撤销。
-- [旧连接迁移说明](docs/migration.md)：迁移已有助手或独立 MCP 配置。
-- [实际验收记录](docs/acceptance.md)：已验证的环境、真实对话结果和待验收项目。
-- [构建与发布说明](docs/releasing.md)：可复查的构建、第三方声明和固定版本发布流程。
-- [更新记录](CHANGELOG.md)：版本变更与发布状态。
-
-## 能力与边界
-
-| 能力 | 工具 |
+| 能力 | 工具或入口 |
 |---|---|
-| 登录与连接状态 | `get_connection_status`、`start_login`、`get_login_status`、`disconnect` |
-| 策略与团队 | `list_strategies`、`get_strategy_info`、`get_strategy_performance`、`get_strategy_nav`、`get_research_team` |
-| 因子目录与说明 | `list_factors`、`get_factor_info` |
-| 最多 50 行数值预览 | `preview_factor` |
-| 云端导出与任务查询 | `create_export`、`get_export`、`list_exports` |
-| 保存文件并校验 | `download_export`、`get_download` |
+| 登录、状态和断开连接 | `get_connection_status`、`start_login`、`get_login_status`、`disconnect` |
+| 因子目录、说明和数值预览 | `list_factors`、`get_factor_info`、`preview_factor` |
+| 因子完整导出、任务查询和本地校验下载 | `create_export`、`get_export`、`list_exports`、`download_export`、`get_download` |
+| 策略目录与详情 | `list_strategies`、`get_strategy_info` |
+| 原表表现与净值分页 | `get_strategy_performance`、`get_strategy_nav` |
+| 团队介绍及已发布联系方式 | `get_research_team` |
+| 完整净值 CSV、原始 Excel 及图表 | 受保护研究中心；研究工具返回网页入口 |
 
-首版面向本地 Windows Codex；不承诺 macOS、Linux、Claude Code 或纯云端客户端兼容。未提供全量统计、排名或回测工具。Codex 本身需已安装且能够正常使用；客户端的执行权限提示按其设置出现。隔离 Codex 配置中的测试不等于全新 Windows 用户或干净物理机验收。
+本地插件提供 17 个工具，远端 MCP 提供其中 11 个数据工具；登录管理和本地文件下载由 Windows 插件完成。
 
-云端仍执行客户隔离和当前权限检查。任务最多 10 个因子、200 个指定股票代码、5,000 万行、1 GiB、30 分钟；完成文件保留一小时。下载链接不公开，也不在 URL 中携带 API Key。
+因子预览最多 50 行，完整数据下载到 `<项目目录>/downloads/factors/<任务编号>/`，校验大小和 SHA-256 后才算完成。每个导出最多 10 个因子、200 个指定股票代码、5,000 万行、1 GiB、30 分钟；完成文件保留一小时。
 
-## 源码与数据
+净值每页最多 50 行，翻页固定同一 `version`。研究结果保留来源、统计期间、原始指标名称、空值和资料警告；日期筛选不重算表现指标。预览和分页结果不代表全量回测。本版不执行新回测、排名或指标重算。
 
-`client/` 包含本地程序源码；`plugins/xyquant-factors/` 包含插件、取数 Skill 和随版本提供的程序。用户凭据和本地任务记录存放于 `%LOCALAPPDATA%/XYQuant/FactorConnect`，不写入插件安装目录。
+## 账号与 OAuth
 
-客户端源码使用 [MIT 许可证](LICENSE)。该许可证不授予因子数据、服务器账号或第三方材料的使用、再分发权；数据使用以服务提供方与客户之间的约定及后台授权为准。
+正常启用、未过期的新旧普通客户默认可查看和下载全部已发布因子、策略和团队资料，无需管理员逐项开通；后台后续调整、账号停用／到期和连接撤销仍会生效。管理后台权限独立，不向普通客户开放。
+
+| OAuth scope | 客户端获准执行的操作 |
+|---|---|
+| `factors:read` | 因子目录、说明、预览及导出任务查询 |
+| `factors:export` | 创建因子导出任务 |
+| `factors:download` | 下载自己获准访问的导出文件 |
+| `research:read` | 已发布策略、表现、净值和团队介绍（含联系方式） |
+
+账号的数据权限与客户端 OAuth 授权分别检查。**升级插件或刷新旧令牌不会自动增加 `research:read`。** 遇到研究授权不足时，先明确同意替换当前连接，再断开并重新登录，在网页确认新增范围。断开影响同一 Windows 用户共享的连接，不删除已下载文件。
+
+连接最长有效 30 天，并受账号有效期限制。短期 access token 可在有效连接内自动刷新，刷新不扩大 scope 或延长连接期限。凭据由 Windows DPAPI 加密，默认保存在 `%LOCALAPPDATA%/XYQuant/FactorConnect`，不写入项目仓库或插件安装目录。
+
+## 从旧版本升级
+
+- 固定在 `v0.1.0-rc.1` 的客户需将市场来源选择为 `v0.2.0-rc.1`，再按 Codex 提示更新或重新安装插件；只刷新旧固定标签不会变成新版。
+- 新增工具需要客户端刷新工具列表，按界面提示重新打开会话。仅更新同一 Windows 用户的默认连接时，插件下一次调用会读取新凭据；已验证同一 `0.2.0-rc.1` 进程无需重启即可读取新连接。
+- 服务端上线、GitHub 文档更新和本机连接切换是不同操作。网站更新不会替客户升级插件或同意 OAuth 授权。
+
+## 文档与发布范围
+
+- [客户使用说明](docs/customer-guide.md)：安装、网页登录、升级和常见问题。
+- [研究工具说明](docs/research-mcp.md)：数据版本、统计口径和权限边界。
+- [管理员说明](docs/admin-guide.md) · [旧独立连接迁移](docs/migration.md)。
+- [本版实际验收](docs/acceptance-0.2.0-rc.1.md) · [早期验收记录](docs/acceptance.md)。
+- [构建与发布](docs/releasing.md) · [更新记录](CHANGELOG.md)。
+
+公开仓库包含客户端源码、插件、合成测试和 Windows 构建产物。服务端源码、真实研究资料、客户身份和凭据留在私有环境。当前未启用 GitHub Actions，验收依据为文档列明的本地测试及线上实测；不把没有运行的 CI 标为通过。
+
+`main` 上的说明会随验收补充更新；固定标签和发布包保留发布时快照。2026-10-03 的补充说明未改变 `v0.2.0-rc.1` 的程序、标签或资产。客户端代码使用 [MIT 许可证](LICENSE)，不授予因子数据、账号或研究资料的再分发权。
